@@ -1,7 +1,7 @@
+from app_bbs import app
 from flask import Flask, request, render_template
 from flask_restful import Resource, Api
 
-app = Flask(__name__)
 api = Api(app)
 
 @app.route('/')
