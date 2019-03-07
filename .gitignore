@@ -2,7 +2,6 @@ venv/
 node_modules/
 .vscode/
 bbs/app_bbs/static/js/*.js
-bbs/app_bbs/server.py
 
 *.bak
 *.pyc
