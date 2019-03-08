@@ -6,3 +6,4 @@ bbs/app_bbs/static/js/*.js
 
 *.bak
 *.pyc
+*.pyo

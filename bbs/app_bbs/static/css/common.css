@@ -1,0 +1,154 @@
+/* Common Things */
+
+* {
+    transition-duration: 0.2s;
+    text-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+body {
+    color: rgb(48, 48, 48);
+    transition: all .3s cubic-bezier(.3, 1, .5, 1);
+    line-height: 1.6;
+}
+body:before {
+    content: " ";
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #f5e8cb top left 0 no-repeat;
+    background-size: cover;
+    opacity: .45;
+}
+
+p {
+    word-wrap: break-word;
+}
+
+svg {
+    width: 100%;
+}
+
+/* Page Elements */
+
+.app-jumbo {
+    background-color: rgba(233, 236, 239, 0.8);
+}
+#jumbo-title {
+    font-weight: 400;
+}
+
+.app-row {
+    padding-bottom: 1em;
+    padding-top: 1em;
+}
+
+.problem-jumbo h1 small {
+    font-size: 50%;
+    font-weight: 200;
+}
+
+.app-card img {
+    filter: blur(6px);
+    overflow: hidden;
+}
+.app-card-img-hover {
+    filter: blur(3px) !important;
+}
+.app-problem-card {
+    height: 11.68em;
+    width: 20em;
+}
+
+.app-card-img-overlay {
+    background: rgba(0, 0, 0, 0.52);
+    text-align: center;
+    padding: 5%;
+}
+.app-card-img-overlay:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+.app-problem-card-img-overlay {
+    background: rgba(0, 0, 0, 0.3);
+    text-align: center;
+    padding: 5%;
+}
+.app-problem-card-img-overlay:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.h1-white {
+    color: white;
+    text-align: center;
+}
+
+#content img {
+    max-width: 100%;
+}
+#logo:hover {
+    animation: rotation 0.2s infinite linear;
+}
+
+.app-card-mask {
+    -webkit-mask-image: -webkit-gradient(linear, left top, right bottom, from(rgba(0,0,0,0.6)), to(rgba(0,0,0,1)));
+}
+
+@media screen and (max-width: 768px) {
+    .app-card-detail {
+        display: block !important;
+    }
+    .app-card-table {
+        height: 70% !important;
+    }
+    #jumbo-title {
+        font-size: 2.5rem;
+    }
+    h1 {
+        font-size: 2.2rem;
+    }
+    h2 {
+        font-size: 1.9rem;
+    }
+}
+
+.hidden-flag {
+    font-size: 0;
+}
+.hidden-flag::before {
+    font-size: 14px;
+    content: "****************";
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(360deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+/* Loader */
+
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: 0 auto;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Charts */
+
+.nv-label text {
+    font-size: 1.2rem;
+}
+
