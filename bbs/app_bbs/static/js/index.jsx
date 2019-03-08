@@ -153,6 +153,9 @@ var Thread = createReactClass({
                     .topic {
                         font-size: 1.085em;
                     }
+                    .author {
+                        color: #1a3959;
+                    }
                     .postdate {
                         display: block;
                         overflow: hidden;
@@ -215,30 +218,21 @@ var Thread = createReactClass({
 var Forums = createReactClass({
     getInitialState: function() {
         return {
-            topics: [
-                {
-                    "tid" : 1, 
-                    "topic_name": "皇后局都是这样打游戏的？那这个游戏怕是不适合我", 
-                    "topic_type" : "", 
-                    "uid" : 233, 
-                    "username" : "blacsheep", 
-                    "post_time" : "Thu Mar 7 18:30:58 2019",
-                    "reply_time": "Thu Mar 7 18:31:58 2019", 
-                    "replies": 1
-                }, {
-                    "tid" : 2, 
-                    "topic_name": "被6战支配的我终于舒服了，4亡灵巨魔骑艰难吃下精英战", 
-                    "topic_type" : "讨论一波", 
-                    "uid" : 234, 
-                    "username" : "TGWarWolf", 
-                    "post_time" : "Thu Mar 7 18:35:58 2019",
-                    "reply_time": "Thu Mar 7 18:37:58 2019",
-                    "replies": 10
-                },
-            ], 
+            topics: [], 
         };
     },
-
+    initTopic: function(json) {
+		this.setState({topics: json});
+	},
+    componentWillMount: function(){
+        fetch('http://localhost:5000/api/topic')
+        .then(function(response) {
+            return response.json()
+        })
+        .then(this.initTopic).catch(function(ex) {
+            console.log('Init topic failed', ex)
+        })
+	},
     render: function() {
         var topicList = [];
         for (var i = 0; i < this.state.topics.length; i++){
