@@ -2,6 +2,13 @@ from app_bbs import app
 from flask import Flask, request, render_template
 from flask_restful import Resource, Api
 
+def after_request(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'PUT,GET,POST,DELETE'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+    return response
+
+app.after_request(after_request)
 api = Api(app)
 
 @app.route('/')
