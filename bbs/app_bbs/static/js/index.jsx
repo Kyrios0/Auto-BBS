@@ -1,5 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import {BrowserRouter as Router, Route, Link, Switch} from 'react-router-dom'
+
+var bindURL = "http://localhost:5000";
 
 var createReactClass = require('create-react-class');
 
@@ -16,14 +19,14 @@ var TopBar = createReactClass({
         return (
             <div id="mainmenu">
                 <div className="right">
-                    <div className="li"><a className="active" href="#login">Login</a></div>
+                    <div className="li"><a className="a active" href="#login">Login</a></div>
                 </div>
                 <div>
                     <div className="ul">
-                        <div className="li"><a href="#home"><img src="https://blog.kyrios.cn/wp-content/uploads/2019/03/logo_50px.png"/></a></div>
-                        <div className="li"><a href="#home">Home</a></div>
-                        <div className="li"><a href="#about">About</a></div>
-                        <div className="li"><a href="#contact">Contact</a></div>
+                        <div className="li"><a className="a" href="#home"><img src="https://blog.kyrios.cn/wp-content/uploads/2019/03/logo_50px.png"/></a></div>
+                        <div className="li"><a className="a" href="#home">Home</a></div>
+                        <div className="li"><a className="a" href="#about">about</a></div>
+                        <div className="li"><a className="a" href="#contact">Contact</a></div>
                     </div>
                 </div>
                 
@@ -42,12 +45,13 @@ var TopBar = createReactClass({
                     .li {
                         float: left;
                         border-right:1px solid #bbb;
+                        font-size: 1.085em;
                     }
                     .right {
                         float: right;
                         border-right: none;
                     }
-                    .li a {
+                    .li .a {
                         display: block;
                         color: black;
                         text-align: center;
@@ -55,14 +59,14 @@ var TopBar = createReactClass({
                         text-decoration: none;
                         line-height: 55px;
                     } 
-                    .li a:hover:not(.active) {
+                    .li .a:hover:not(.active) {
                         background-color: #fff8e7;
                     }
-                    .li a.active {
+                    .li .a.active {
                         background-color: #591804;
                         color: #fff;
                     }
-                    .li a.active:hover {
+                    .li .a.active:hover {
                         background-color: #b87563;
                         color: #fff;
                     }
@@ -134,24 +138,33 @@ var Thread = createReactClass({
                             <a className="replies"> { this.props.topic['replies'] } </a>
                         </td>
                         <td className="c2">
-                            <a className="topic"> { this.props.topic['topic_name'] } </a>
+                            <a className="topic" href={bindURL+"/thread/"+this.props.topic['tid']}> { this.props.topic['topic_name'] } </a>
                         </td>
                         <td className="c3">
-                            <a className="author"> { this.props.topic['username'] } </a>
+                            <a className="author" href={bindURL+"/user/"+this.props.topic['uid']}> { this.props.topic['username'] } </a>
                             <span className="postdate"> { this.props.topic['post_time'] } </span>
                         </td>
                         <td className="c4">
-                            <a className="replydate"> { this.props.topic['reply_time'] } </a>
+                            <a className="replydate" href={bindURL+"/thread/"+this.props.topic['tid']+"#latest"}> { this.props.topic['reply_time'] } </a>
                         </td>
                     </tr>
                 </tbody>
                 <style jsx>{`
+                    a {
+                        text-decoration: none;
+                        color: #1a3959;
+                    }
+                    a:hover {
+                        text-decoration: underline;
+                        color: #2c5787;     
+                    }
                     .replies {
                         font-size: 1.667em;
                         color: rgb(238, 209, 175);
                     }
                     .topic {
                         font-size: 1.085em;
+                        line-height: 1.9em;
                     }
                     .author {
                         color: #1a3959;
@@ -225,7 +238,7 @@ var Forums = createReactClass({
 		this.setState({topics: json});
 	},
     componentWillMount: function(){
-        fetch('http://localhost:5000/api/topic')
+        fetch(bindURL+'/api/topic')
         .then(function(response) {
             return response.json()
         })
@@ -285,9 +298,14 @@ var BBS = createReactClass({
 });
 
 ReactDOM.render(
-    <div>
-        <BBS/>
-    </div>,
+    <Router>
+        <div>
+        <Switch>
+            <Route exact path="/" component={BBS} />
+            <Route path="/about" component={BBS} />
+        </Switch>
+        </div>
+    </Router>,
     destination
 );
 

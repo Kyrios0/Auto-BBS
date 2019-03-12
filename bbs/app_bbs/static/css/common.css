@@ -9,6 +9,7 @@ body {
     color: rgb(48, 48, 48);
     transition: all .3s cubic-bezier(.3, 1, .5, 1);
     line-height: 1.6;
+    font-size: 12px;
 }
 body:before {
     content: " ";
