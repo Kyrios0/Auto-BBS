@@ -1,6 +1,61 @@
 import React, {Component} from 'react';
-
+import {Link} from 'react-router-dom'
 var bindURL = "http://localhost:5000";
+
+function resolveScopeStyles(scope) {
+    return {
+        className: scope.props.className,
+        styles: scope.props.children
+    }
+}
+
+const topbarLink = resolveScopeStyles(
+    <div>
+        <style jsx>{`
+            .link {
+                display: block;
+                color: black;
+                text-align: center;
+                padding: 5px 16px;
+                text-decoration: none;
+                line-height: 55px;
+            } 
+            .link:hover:not(.active) {
+                background-color: #fff8e7;
+            }
+            .link.active {
+                background-color: #591804;
+                color: #fff;
+            }
+            .link.active:hover {
+                background-color: #b87563;
+                color: #fff;
+            }
+        `}</style>
+    </div>
+)
+
+const threadLink = resolveScopeStyles(
+    <div>
+        <style jsx>{`
+            .link {
+                text-decoration: none;
+                color: #1a3959;
+            }
+            .link:hover {
+                text-decoration: underline;
+                color: #2c5787;     
+            }
+            .topic {
+                font-size: 1.085em;
+                line-height: 1.9em;
+            }
+            .author {
+                color: #1a3959;
+            }
+        `}</style>
+    </div>
+)
 
 class TopBar extends Component {
     render() {
@@ -11,13 +66,12 @@ class TopBar extends Component {
                 </div>
                 <div>
                     <div className="ul">
-                        <div className="li"><a className="a" href="#home"><img src="https://blog.kyrios.cn/wp-content/uploads/2019/03/logo_50px.png"/></a></div>
-                        <div className="li"><a className="a" href="#home">Home</a></div>
-                        <div className="li"><a className="a" href="#about">about</a></div>
-                        <div className="li"><a className="a" href="#contact">Contact</a></div>
+                        <div className="li"><Link to="/" className={`link ${topbarLink.className}`}><img src="https://blog.kyrios.cn/wp-content/uploads/2019/03/logo_50px.png"/></Link></div>
+                        <div className="li"><Link to="/" className={`link ${topbarLink.className}`}>Home</Link></div>
+                        <div className="li"><Link to="/about" className={`link ${topbarLink.className}`}>About</Link></div>
                     </div>
                 </div>
-
+                {topbarLink.styles}
                 <style jsx>{`
                     #mainmenu {
                         overflow: hidden;
@@ -65,7 +119,6 @@ class TopBar extends Component {
 };
 
 class TopBG extends Component {
-
     render() {
         return (
             <div className="head_bg">
@@ -106,8 +159,6 @@ class TopBG extends Component {
 };
 
 class Thread extends Component {
-
-
     render() {
         return (
             <React.Fragment>
@@ -117,17 +168,24 @@ class Thread extends Component {
                             <a className="replies"> { this.props.topic['replies'] } </a>
                         </td>
                         <td className="c2">
-                            <a className="topic" href={bindURL+"/thread/"+this.props.topic['tid']}> { this.props.topic['topic_name'] } </a>
+                            <Link to={"/thread/"+this.props.topic['tid']} className={`link topic ${threadLink.className}`}> 
+                                { this.props.topic['topic_name'] } 
+                            </Link>
                         </td>
                         <td className="c3">
-                            <a className="author" href={bindURL+"/user/"+this.props.topic['uid']}> { this.props.topic['username'] } </a>
+                            <Link to={"/user/"+this.props.topic['uid']} className={`link author ${threadLink.className}`}> 
+                                { this.props.topic['username'] } 
+                            </Link>
                             <span className="postdate"> { this.props.topic['post_time'] } </span>
                         </td>
                         <td className="c4">
-                            <a className="replydate" href={bindURL+"/thread/"+this.props.topic['tid']+"#latest"}> { this.props.topic['reply_time'] } </a>
+                            <Link to={"/thread/"+this.props.topic['tid']+"#latest"} className={`link replydate ${threadLink.className}`}> 
+                                { this.props.topic['reply_time'] } 
+                            </Link>
                         </td>
                     </tr>
                 </tbody>
+                {threadLink.styles}
                 <style jsx>{`
                     a {
                         text-decoration: none;
@@ -140,13 +198,6 @@ class Thread extends Component {
                     .replies {
                         font-size: 1.667em;
                         color: rgb(238, 209, 175);
-                    }
-                    .topic {
-                        font-size: 1.085em;
-                        line-height: 1.9em;
-                    }
-                    .author {
-                        color: #1a3959;
                     }
                     .postdate {
                         display: block;
