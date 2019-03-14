@@ -1,28 +1,21 @@
-import React from "react";
+import React, {Component} from 'react';
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router, Route, Link, Switch} from 'react-router-dom';
-/*import {TopBar, TopBG, Forums} from "./widgets"*/
+import {TopBar, TopBG, Forums} from "./widgets.jsx"
 
 import css from 'styled-jsx/css'
 
-var bindURL = "http://localhost:5000";
-
-var createReactClass = require('create-react-class');
-
 var destination = document.querySelector("#container");
 
-var {TopBG} = require('./widgets.jsx');
-var {TopBar} = require('./widgets.jsx');
-var {Forums} = require('./widgets.jsx');
-
-var BBS = createReactClass({
-    getInitialState: function() {
-        return {
-            isLogin: -1,
+class BBS extends Component {
+    constructor() {
+        super();
+        this.state = {
+            isLogin: -1, 
         };
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <div>
                 <TopBG/>
@@ -31,15 +24,33 @@ var BBS = createReactClass({
             </div>
         )
     }
-});
+};
+
+class About extends Component {
+    constructor() {
+        super();
+        this.state = {
+            isLogin: -1, 
+        };
+    }
+
+    render() {
+        return (
+            <div>
+                <TopBar/>
+                <Forums/>
+            </div>
+        )
+    }
+};
 
 ReactDOM.render(
     <Router>
         <div>
-        <Switch>
-            <Route exact path="/" component={BBS} />
-            <Route path="/about" component={BBS} />
-        </Switch>
+            <Switch>
+                <Route exact path="/" component={BBS} />
+                <Route path="/about" component={About} />
+            </Switch>
         </div>
     </Router>,
     destination
