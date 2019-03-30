@@ -158,7 +158,7 @@ class TopBG extends Component {
     }
 };
 
-class Thread extends Component {
+class ThreadLine extends Component {
     render() {
         return (
             <React.Fragment>
@@ -280,7 +280,7 @@ class Forums extends Component {
         var topicList = [];
         for (var i = 0; i < this.state.topics.length; i++){
             topicList.push(
-                <Thread topic={this.state.topics[i]} id={i}/>
+                <ThreadLine topic={this.state.topics[i]} id={i}/>
             );
         }
         return (
@@ -309,8 +309,106 @@ class Forums extends Component {
     }
 };
 
+class About extends Component {
+    constructor() {
+        super();
+        this.state = {
+        };
+    }
+
+    render() {
+        return (
+            <div>
+            </div>
+        )
+    }
+};
+
+class User extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            uid: this.props.match.params.id, 
+        };
+    }
+    render() {
+        return (
+            <div>
+                <UserInfo/>
+                <RelateActive/>
+                <HighLights/>
+            </div>
+        )
+    }
+}
+
+class UserInfo extends Component {
+    constructor() {
+        super();
+        this.state = {
+        };
+    }
+
+    render() {
+        return (
+            <div>
+            </div>
+        )
+    }
+};
+
+class RelateActive extends Component {
+    constructor() {
+        super();
+        this.state = {
+        };
+    }
+
+    render() {
+        return (
+            <div>
+            </div>
+        )
+    }
+};
+
+class HighLights extends Component {
+    constructor() {
+        super();
+        this.state = {
+        };
+    }
+
+    render() {
+        return (
+            <div>
+            </div>
+        )
+    }
+};
+
+class Thread extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            tid: this.props.match.params.id, 
+        };
+    }
+    render() {
+        return (
+            <div>
+                <h2> Thread: </h2>
+                <p> {this.state.tid} </p>
+            </div>
+        )
+    }
+}
+
 module.exports = {
     TopBar: TopBar,
     TopBG: TopBG,
-    Forums: Forums
+    Forums: Forums, 
+    About: About,
+    User: User,
+    Thread: Thread
   }
