@@ -23,6 +23,8 @@ topic_list = [
         "uid" : 233, 
         "username" : "blacsheep", 
         "post_time" : "2019-03-24 17:15",
+        "reply_uid": 234,
+        "reply_username": "TGWarWolf",
         "reply_time": "2019-03-24 17:16", 
         "replies": 1
     }, {
@@ -32,6 +34,8 @@ topic_list = [
         "uid" : 234, 
         "username" : "TGWarWolf", 
         "post_time" : "2019-03-31 13:57",
+        "reply_uid": 233,
+        "reply_username": "blacsheep",
         "reply_time": "2019-03-31 13:58",
         "replies": 10
     },

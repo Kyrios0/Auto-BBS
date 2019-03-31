@@ -56,6 +56,43 @@ const threadLink = resolveScopeStyles(
     </div>
 )
 
+const createButtonLink = resolveScopeStyles(
+    <div>
+        <style jsx>{`
+            .link {
+                border: none;
+                display: inline-block;
+                background-color: #29b;
+                background-image: url("https://osu.ppy.sh/images/backgrounds/buttonblue@2x.png");
+                background-size: cover;
+                background-position: 50% 50%;
+                transition: background-position .12s;
+                padding: 5px;
+                color: #fff;
+                font-size: 12px;
+                font-weight: 600;
+                overflow: hidden;
+                cursor: pointer;
+                text-transform: none;
+                white-space: nowrap;
+
+                border-radius: 18px;
+                padding: 0 10px;
+                height: 36px;
+                min-width: 100px;
+                vertical-align: middle;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .link:hover {
+                background-position: calc(50% - 20px) 50%;
+                text-decoration: none;
+            }
+        `}</style>
+    </div>
+)
+
 class TopBar extends Component {
     render() {
         return (
@@ -122,7 +159,7 @@ class TopBG extends Component {
                         margin: 65px auto -255px auto;
                         max-width: 1000px;
                         overflow: hidden;
-                        background: rgba(0, 0, 0, 0) url("https://blog.kyrios.cn/wp-content/uploads/2019/03/bbs_head.jpg") repeat scroll left bottom;
+                        background: rgba(0, 0, 0, 0) url("https://blog.kyrios.cn/wp-content/uploads/2019/04/bbs_head2.jpg") repeat scroll left bottom;
                     }
                     .title_wrapper {
                         margin-bottom: -147px;
@@ -149,7 +186,7 @@ class TopBG extends Component {
 class ThreadLine extends Component {
     render() {
         return (
-            <div>
+            <div className="topic_entry_bg">
                 <div className="topic_entry">
                     <div className="row">
                         <div className="topic_entry_content c1">
@@ -161,15 +198,20 @@ class ThreadLine extends Component {
                             </Link>
                         </div>
                         <div className="topic_entry_content c3">
+                            poster: 
                             <Link to={"/user/"+this.props.topic['uid']} className={`link author ${threadLink.className}`}> 
-                                { this.props.topic['username'] } 
+                                { ' '+this.props.topic['username'] } 
                             </Link>
                             <span className="postdate"> { this.props.topic['post_time'] } </span>
                         </div>
                         <div className="topic_entry_content c4">
                             <Link to={"/thread/"+this.props.topic['tid']+"#latest"} className={`link replydate ${threadLink.className}`}> 
-                                { this.props.topic['reply_time'] } 
+                                last reply: 
                             </Link>
+                            <Link to={"/user/"+this.props.topic['reply_uid']} className={`link author ${threadLink.className}`}> 
+                                { ' '+this.props.topic['reply_username'] } 
+                            </Link>
+                            <span className="postdate"> { this.props.topic['reply_time'] } </span>
                         </div>
                     </div>
                 </div>
@@ -178,7 +220,7 @@ class ThreadLine extends Component {
                     .topic_entry {
                         margin: 0 40px;
                     }
-                    .topic_entry:hover {
+                    .topic_entry_bg:hover {
                         background-color: rgb(238, 238, 238);
                     }
                     .row {
@@ -258,8 +300,14 @@ class Forums extends Component {
         return (
             <div className="mod_wrap">
                 <div className="forumbox">
+                    <div className="forum_spacer">
+                        <Link to={"/topic/create"} className={`link ${createButtonLink.className}`}>
+                            <span className="btn_content">Post New</span>
+                        </Link>
+                    </div>
                     { topicList }
                 </div>
+                {createButtonLink.styles}
                 <style jsx>{`
                     .mod_wrap {
                         text-align: center;
@@ -275,7 +323,14 @@ class Forums extends Component {
                         max-width: 1000px;
                         background-color: white;
                     }
-                    
+                    .forum_spacer {
+                        display: flex;
+                        align-items: center;
+                        margin: 30px 40px;
+                    }
+                    .btn_content {
+                        margin: 0 5px;
+                    }
                 `}</style>
             </div>
         )
