@@ -1,60 +1,7 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom'
-
-function resolveScopeStyles(scope) {
-    return {
-        className: scope.props.className,
-        styles: scope.props.children
-    }
-}
-
-const topbarLink = resolveScopeStyles(
-    <div>
-        <style jsx>{`
-            .link {
-                display: block;
-                color: white;
-                text-align: center;
-                padding: 5px 16px;
-                text-decoration: none;
-                line-height: 55px;
-            } 
-            .link:hover:not(.active) {
-                background-color: rgb(40, 40, 40);
-            }
-            .link.active {
-                background-color: #591804;
-                color: #fff;
-            }
-            .link.active:hover {
-                background-color: #b87563;
-                color: #fff;
-            }
-        `}</style>
-    </div>
-)
-
-const threadLink = resolveScopeStyles(
-    <div>
-        <style jsx>{`
-            .link {
-                text-decoration: none;
-                color: #1a3959;
-            }
-            .link:hover {
-                text-decoration: underline;
-                color: #2c5787;     
-            }
-            .topic {
-                font-size: 1.085em;
-                line-height: 1.9em;
-            }
-            .author {
-                color: #1a3959;
-            }
-        `}</style>
-    </div>
-)
+import {Link} from 'react-router-dom';
+import {topbarLink, threadLink, createButtonLink} from "./linkStyles.jsx";
+import {avatarLink, usernameLink} from "./linkStyles.jsx";
 
 class TopBar extends Component {
     render() {
@@ -63,9 +10,17 @@ class TopBar extends Component {
                 <div className="nav">
                     <div className="left">
                         <div className="ul">
-                            <div className="li"><Link to="/" className={`link ${topbarLink.className}`}><img src="https://blog.kyrios.cn/wp-content/uploads/2019/03/logo_50px.png"/></Link></div>
-                            <div className="li"><Link to="/" className={`link ${topbarLink.className}`}>Home</Link></div>
-                            <div className="li"><Link to="/about" className={`link ${topbarLink.className}`}>About</Link></div>
+                            <div className="li">
+                                <Link to="/" className={`link ${topbarLink.className}`}>
+                                    <img style={{height: 50+'px'}} src="https://blog.kyrios.cn/wp-content/uploads/2019/04/auto-bbs.png"/>
+                                </Link>
+                            </div>
+                            <div className="li">
+                                <Link to="/" className={`link ${topbarLink.className}`}>Home</Link>
+                            </div>
+                            <div className="li">
+                                <Link to="/about" className={`link ${topbarLink.className}`}>About</Link>
+                            </div>
                         </div>
                     </div>
                     <div className="right">
@@ -122,7 +77,7 @@ class TopBG extends Component {
                         margin: 65px auto -255px auto;
                         max-width: 1000px;
                         overflow: hidden;
-                        background: rgba(0, 0, 0, 0) url("https://blog.kyrios.cn/wp-content/uploads/2019/03/bbs_head.jpg") repeat scroll left bottom;
+                        background: rgba(0, 0, 0, 0) url("https://blog.kyrios.cn/wp-content/uploads/2019/04/bbs_head2.jpg") repeat scroll left bottom;
                     }
                     .title_wrapper {
                         margin-bottom: -147px;
@@ -149,7 +104,7 @@ class TopBG extends Component {
 class ThreadLine extends Component {
     render() {
         return (
-            <div>
+            <div className="topic_entry_bg">
                 <div className="topic_entry">
                     <div className="row">
                         <div className="topic_entry_content c1">
@@ -161,15 +116,20 @@ class ThreadLine extends Component {
                             </Link>
                         </div>
                         <div className="topic_entry_content c3">
+                            poster: 
                             <Link to={"/user/"+this.props.topic['uid']} className={`link author ${threadLink.className}`}> 
-                                { this.props.topic['username'] } 
+                                { ' '+this.props.topic['username'] } 
                             </Link>
                             <span className="postdate"> { this.props.topic['post_time'] } </span>
                         </div>
                         <div className="topic_entry_content c4">
                             <Link to={"/thread/"+this.props.topic['tid']+"#latest"} className={`link replydate ${threadLink.className}`}> 
-                                { this.props.topic['reply_time'] } 
+                                last reply: 
                             </Link>
+                            <Link to={"/user/"+this.props.topic['reply_uid']} className={`link author ${threadLink.className}`}> 
+                                { ' '+this.props.topic['reply_username'] } 
+                            </Link>
+                            <span className="postdate"> { this.props.topic['reply_time'] } </span>
                         </div>
                     </div>
                 </div>
@@ -178,7 +138,7 @@ class ThreadLine extends Component {
                     .topic_entry {
                         margin: 0 40px;
                     }
-                    .topic_entry:hover {
+                    .topic_entry_bg:hover {
                         background-color: rgb(238, 238, 238);
                     }
                     .row {
@@ -258,8 +218,14 @@ class Forums extends Component {
         return (
             <div className="mod_wrap">
                 <div className="forumbox">
+                    <div className="forum_spacer">
+                        <Link to={"/topic/create"} className={`link ${createButtonLink.className}`}>
+                            <span className="btn_content">Post New</span>
+                        </Link>
+                    </div>
                     { topicList }
                 </div>
+                {createButtonLink.styles}
                 <style jsx>{`
                     .mod_wrap {
                         text-align: center;
@@ -275,7 +241,14 @@ class Forums extends Component {
                         max-width: 1000px;
                         background-color: white;
                     }
-                    
+                    .forum_spacer {
+                        display: flex;
+                        align-items: center;
+                        margin: 30px 40px;
+                    }
+                    .btn_content {
+                        margin: 0 5px;
+                    }
                 `}</style>
             </div>
         )
@@ -383,6 +356,7 @@ class ThreadTheme extends Component {
         this.state = {
             tid: this.props.id, 
             avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+            uid: "",
             username: "",
             content: "",
             post_time: "",
@@ -398,26 +372,64 @@ class ThreadTheme extends Component {
         })
     }
     initTheme(json) {
-
+        this.setState({
+            uid: json['uid'],
+            username: json['username'],
+            content: json['content'],
+            post_time: json['post_time'],
+            reg_time: json['reg_time']
+        })
     }
     render() {
         return (
-            <div>
+            <div className="thread">
                 <div className="forum-post">
-                    <div className="forum-post-info">
-
+                    <div className="forum-post-info lvl1">
+                        <div className="forum-post-info-main">
+                            <div className="avatar_wrapper">
+                                <Link to={"/users/"+this.state.uid} className={`link ${avatarLink.className}`}>
+                                    <img className="avatar" src={this.state.avatar}/>
+                                </Link>
+                            </div>   
+                            <Link to={"/users/"+this.state.uid} className={`link ${usernameLink.className}`}>
+                                {this.state.username}
+                            </Link>
+                        </div>
+                        <div className="forum-post-info-extra">
+                            <div className="forum-post-info-extra-buttom">
+                                {"Register time: "+this.state.reg_time.split('月')[0]+"月"}
+                            </div> 
+                        </div>
                     </div>
                     <div className="forum-post-body">
-
+                        <div className="forum-post-header-wrapper">
+                            <div className="forum-post-header">
+                                {this.state.post_time}
+                            </div>
+                        </div>
+                        <div className="forum-post-content-wrapper">
+                            <div className="forum-post-content">
+                                {this.state.content}
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
+                {avatarLink.styles}
+                {usernameLink.styles}
                 <style jsx>{`
+                    .thread {
+                        align-self: center;
+                        margin-left: auto;
+                        margin-right: auto;
+                        max-width: 1000px;
+                    }
                     .forum-post {
                         box-shadow: 0 1px 3px rgba(0,0,0,.25);
                         background-color: #fff;
                         margin-bottom: 5px;
                         display: flex;
-                        flex-direction: column;
+                        flex-direction: row;
                     }
                     .forum-post-info {
                         flex: none;
@@ -429,6 +441,69 @@ class ThreadTheme extends Component {
                         flex: 1;
                         display: flex;
                         flex-direction: column;
+                    }
+                    .forum-post-info-main::before {
+                        position: absolute;
+                        content: " ";
+                        top: 0;
+                        left: 0;
+                        height: 100%;
+                        width: 100%;
+                        background-image: url(https://osu.ppy.sh/images/backgrounds/button.svg);
+                        background-size: 300px;
+                        opacity: .5;
+                    }
+                    .forum-post-info-main {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding-top: 20px;
+                        background-image: linear-gradient(180deg,transparent,rgba(0,0,0,.2));
+                        position: relative;
+                    }
+                    .lvl1 {
+                        background-color: #29b;
+                    }
+                    .avatar_wrapper {
+                        background-size: 153px 83px;
+                        padding: 0 30px;
+                    }
+                    .avatar {
+                        width: 100%;
+                        border: 5px solid #fff;
+                    }
+                    .forum-post-info-extra {
+                        background-color: hsla(0,0%,100%,.9);
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        flex: 1 0 auto;
+                        padding: 10px;
+                        text-align: center;
+                    }
+                    .forum-post-info-extra-buttom {
+                        font-size: 11px;
+                        font-weight: 600;
+                        font-style: italic;
+                        color: #555;
+                        margin-bottom: 5px;
+                    }
+                    .forum-post-header-wrapper {
+                        font-size: 12px;
+                        padding: 20px 30px 0 30px;
+                    }
+                    .forum-post-header {
+                        color: #999;
+                    }
+                    .forum-post-content-wrapper {
+                        padding: 20px 30px;
+                    }
+                    .forum-post-content {
+                        font-family: Open Sans,sans-serif;
+                        line-height: 1.35;
+                        color: #444;
+                        font-size: 13px;
+                        line-height: 1.5;
                     }
                 `}</style>
             </div>
@@ -474,4 +549,4 @@ module.exports = {
     About: About,
     User: User,
     Thread: Thread
-  }
+}
