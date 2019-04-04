@@ -29,7 +29,7 @@ const topBarStyle = css`
 `
 //#endregion
 //#region topBGStyle
-const topBarStyle = css`
+const topBGStyle = css`
     .head_bg {
         height: 190px;
         margin: 65px auto -255px auto;
