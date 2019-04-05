@@ -42,11 +42,9 @@ class TopBG extends Component {
         return (
             <div className="head_bg">
                 <div className="title_wrapper">
-                    <div className="title">
-                        
+                    <div className={this.props.title.length?"title-text":"title-image"}>
+                        {this.props.title}
                     </div>
-                </div>
-                <div className="head_shadow">
                 </div>
                 <style jsx>{topBGStyle}</style>
             </div>
@@ -120,6 +118,7 @@ class Forums extends Component {
         }
         return (
             <div className="mod_wrap">
+                <TopBG title=""/>
                 <div className="forumbox">
                     <div className="forum_spacer">
                         <Link to={"/topic/create"} className={`link ${createButtonLink.className}`}>
@@ -235,6 +234,7 @@ class ThreadTheme extends Component {
         super(props);
         this.state = {
             tid: this.props.id, 
+            topic_name: "",
             avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
             uid: "",
             username: "",
@@ -254,6 +254,7 @@ class ThreadTheme extends Component {
     initTheme(json) {
         this.setState({
             uid: json['uid'],
+            topic_name: json['topic_name'],
             username: json['username'],
             content: json['content'],
             post_time: json['post_time'],
@@ -262,44 +263,46 @@ class ThreadTheme extends Component {
     }
     render() {
         return (
-            <div className="thread">
-                <div className="forum-post">
-                    <div className="forum-post-info lvl1">
-                        <div className="forum-post-info-main">
-                            <div className="avatar_wrapper">
-                                <Link to={"/users/"+this.state.uid} className={`link ${avatarLink.className}`}>
-                                    <img className="avatar" src={this.state.avatar}/>
+            <div>
+                <TopBG title={this.state.topic_name}/>
+                <div className="thread">
+                    <div className="forum-post">
+                        <div className="forum-post-info lvl1">
+                            <div className="forum-post-info-main">
+                                <div className="avatar_wrapper">
+                                    <Link to={"/users/"+this.state.uid} className={`link ${avatarLink.className}`}>
+                                        <img className="avatar" src={this.state.avatar}/>
+                                    </Link>
+                                </div>   
+                                <Link to={"/users/"+this.state.uid} className={`link ${usernameLink.className}`}>
+                                    {this.state.username}
                                 </Link>
-                            </div>   
-                            <Link to={"/users/"+this.state.uid} className={`link ${usernameLink.className}`}>
-                                {this.state.username}
-                            </Link>
-                        </div>
-                        <div className="forum-post-info-extra">
-                            <div className="forum-post-info-extra-buttom">
-                                {"Register time: "+this.state.reg_time.split('月')[0]+"月"}
-                            </div> 
-                        </div>
-                    </div>
-                    <div className="forum-post-body">
-                        <div className="forum-post-header-wrapper">
-                            <div className="forum-post-header">
-                                {this.state.post_time}
+                            </div>
+                            <div className="forum-post-info-extra">
+                                <div className="forum-post-info-extra-buttom">
+                                    {"Register time: "+this.state.reg_time.split('月')[0]+"月"}
+                                </div> 
                             </div>
                         </div>
-                        <div className="forum-post-content-wrapper">
-                            <div className="forum-post-content">
-                                {this.state.content}
+                        <div className="forum-post-body">
+                            <div className="forum-post-header-wrapper">
+                                <div className="forum-post-header">
+                                    {this.state.post_time}
+                                </div>
                             </div>
+                            <div className="forum-post-content-wrapper">
+                                <div className="forum-post-content">
+                                    {this.state.content}
+                                </div>
+                            </div>
+                            
                         </div>
-                        
                     </div>
+                    {avatarLink.styles}
+                    {usernameLink.styles}
+                    <style jsx>{threadThemeStyle}</style>
                 </div>
-                {avatarLink.styles}
-                {usernameLink.styles}
-                <style jsx>{threadThemeStyle}</style>
             </div>
-            
         )
     }
 };
