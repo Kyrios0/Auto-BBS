@@ -18,7 +18,6 @@ class AutoBBS extends Component {
         return (
             <Router>
                 <div>
-                    <TopBG/>
                     <TopBar/>
                     <Switch>
                         <Route exact path="/" component={Forums} />
