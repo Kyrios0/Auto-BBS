@@ -104,7 +104,7 @@ comment_list = [
             "rid": 1,
             "uid": 234,
             "username": "TGWarWolf",
-            "time" : "2019-03-24 17:20",
+            "post_time" : "2019-03-24 17:20",
             "reg_time": "2018年 1月8日 21:51 UTC+8",
             "content": """光楼主这个态度就比那些只会口嗨的强一万倍""", 
             "like_count": 84,
@@ -116,7 +116,7 @@ comment_list = [
             "uid": 234,
             "username": "TGWarWolf",
             "reg_time": "2018年 1月8日 21:51 UTC+8",
-            "time" : "2019-03-24 17:25",
+            "post_time" : "2019-03-24 17:25",
             "content": """在网络上，承认别人比自己强大概是一件很困难的事""", 
             "like_count": 18,
             "is_liked": False,
@@ -127,7 +127,7 @@ comment_list = [
             "uid": 234,
             "username": "TGWarWolf",
             "reg_time": "2018年 1月8日 21:51 UTC+8",
-            "time" : "2019-03-24 17:26",
+            "post_time" : "2019-03-24 17:26",
             "content": """实力差不多的情况下，的确看运气""", 
             "like_count": 0,
             "is_liked": False,
@@ -140,7 +140,7 @@ comment_list = [
             "uid": 233,
             "username": "blacsheep",
             "reg_time": "2018年 1月7日 21:51 UTC+8",
-            "time" : "Thu Mar 7 18:32:58 2019",
+            "post_time" : "2019-03-24 17:27",
             "content": """是的 神体系下的地精都很猛 修补和伐木机 发条比不过那两个两星就很猛 但是如果能三星也是血强""", 
             "like_count": 51,
             "is_liked": False,
@@ -149,7 +149,7 @@ comment_list = [
                     "rrid": 1, 
                     "uid": 233,
                     "username": "blacsheep",
-                    "time" : "Thu Mar 7 18:35:58 2019",
+                    "post_time" : "2019-03-24 17:28",
                     "content": """就算是1星小马 我也要强行玩神族！""", 
                     "like_count": 21,
                     "is_liked": False,
@@ -180,7 +180,7 @@ class UserAPI(Resource):
         else:
             return "invalid user id"
         
-class CommentAPI(Resource):
+class PostAPI(Resource):
     def get(self, id):
         if id in [1, 2]:
             return comment_list[id-1]
@@ -189,8 +189,8 @@ class CommentAPI(Resource):
 
 api.add_resource(TopicListAPI, '/api/topic', endpoint='topics')
 api.add_resource(TopicAPI, '/api/topic/<int:id>', endpoint='topic')
-api.add_resource(UserAPI, '/api/users/<int:id>', endpoint='user')
-api.add_resource(CommentAPI, '/api/comment/<int:id>', endpoint='comment')
+api.add_resource(UserAPI, '/api/users/<int:id>', endpoint='users')
+api.add_resource(PostAPI, '/api/posts/<int:id>', endpoint='posts')
 
 if __name__ == '__main__':
     app.run()

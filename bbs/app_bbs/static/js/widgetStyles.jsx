@@ -159,12 +159,6 @@ const threadThemeStyle = css`
         margin-right: auto;
         max-width: 1000px;
     }
-    .thread-comment {
-        align-self: center;
-        margin-left: auto;
-        margin-right: auto;
-        max-width: 960px;
-    }
     .forum-post {
         box-shadow: 0 1px 3px rgba(0,0,0,.25);
         background-color: #fff;
@@ -279,6 +273,24 @@ const postBodyStyle = css`
     }
 `
 //#endregion
+//#region threadPostStyle
+const threadPostStyle = css`
+    .thread-post {
+        align-self: center;
+        margin: 0px auto 5px;
+        max-width: 960px;
+    }
+    .forum-post {
+        box-shadow: 0 1px 3px rgba(0,0,0,.25);
+        background-color: #fff;
+        display: flex;
+        flex-direction: row;
+    }
+    .forum-post-body {
+        width: 100%;
+    }
+`
+//#endregion
 module.exports = {
     topBarStyle: topBarStyle,
     topBGStyle: topBGStyle,
@@ -288,5 +300,6 @@ module.exports = {
     likeButtonStyle: likeButtonStyle, 
     posterInfoStyle: posterInfoStyle, 
     postBodyStyle: postBodyStyle,
+    threadPostStyle: threadPostStyle, 
 
 }

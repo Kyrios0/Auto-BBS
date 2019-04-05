@@ -5,7 +5,7 @@ import {avatarLink, usernameLink} from "./linkStyles.jsx";
 
 import {topBarStyle, topBGStyle, ThreadEntryStyle} from "./widgetStyles.jsx"
 import {forumsStyle, threadThemeStyle, likeButtonStyle} from "./widgetStyles.jsx"
-import {posterInfoStyle, postBodyStyle} from "./widgetStyles.jsx"
+import {posterInfoStyle, postBodyStyle, threadPostStyle} from "./widgetStyles.jsx"
 
 class TopBar extends Component {
     render() {
@@ -56,7 +56,7 @@ class TopBG extends Component {
 class ThreadEntry extends Component {
     render() {
         return (
-            <div className="topic_entry_bg" key={this.props.topic['tid']}>
+            <div className="topic_entry_bg">
                 <div className="topic_entry">
                     <div className="row">
                         <div className="topic_entry_content c1">
@@ -114,7 +114,7 @@ class Forums extends Component {
         var topicList = [];
         for (var i = 0; i < this.state.topics.length; i++){
             topicList.push(
-                <ThreadEntry topic={this.state.topics[i]} id={i}/>
+                <ThreadEntry topic={this.state.topics[i]} key={"topic"+i} id={i}/>
             );
         }
         return (
@@ -224,7 +224,7 @@ class Thread extends Component {
         return (
             <div>
                 <ThreadTheme id={this.state.tid}/>
-                <ThreadComments id={this.state.tid}/>
+                <ThreadPosts id={this.state.tid}/>
             </div>
         )
     }
@@ -377,7 +377,80 @@ class ThreadTheme extends Component {
     }
 };
 
-class ThreadComments extends Component {
+class ThreadPosts extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            tid: this.props.id, 
+            posts: []
+        };
+        this.initTheme = this.initTheme.bind(this);
+        fetch('/api/posts/'+this.state.tid)
+        .then(function(response) {
+            return response.json()
+        })
+        .then(this.initTheme).catch(function(ex) {
+            console.log('Init posts failed', ex)
+        })
+    }
+    initTheme(json) {
+        this.setState({posts: json})
+    }
+    render() {
+        var postList = [];
+        for (var i = 0; i < this.state.posts.length; i++){
+            postList.push(
+                <ThreadPost post={this.state.posts[i]} id={i}/>
+            );
+        }
+        return (
+            <div>
+                {postList}
+            </div>
+        )
+    }
+};
+
+class ThreadPost extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            rid: this.props.post['rid'], 
+            uid: this.props.post['uid'],
+            username: this.props.post['username'],
+            reg_time: this.props.post['reg_time'],
+            post_time: this.props.post['post_time'],
+            content: this.props.post['content'],
+            like_count: this.props.post['like_count'],
+            is_liked: this.props.post['is_liked'],
+            reply: this.props.post['reply'],
+            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+        };
+        this.likeAction = this.likeAction.bind(this);
+    }
+    likeAction(event) {
+        var like_count = this.state.is_liked ? this.state.like_count-1 : this.state.like_count+1;
+        this.setState({
+            is_liked: this.state.is_liked ^ 1, 
+            like_count: like_count
+        })
+    }
+    render() {
+        return (
+            <div className="thread-post">
+                <div className="forum-post">
+                    <PosterInfo uid={this.state.uid} username={this.state.username} reg_time={this.state.reg_time} avatar={this.state.avatar}/>
+                    <div className="forum-post-body">
+                        <PostBody is_liked={this.state.is_liked} like_count={this.state.like_count} post_time={this.state.post_time} content={this.state.content} likeAction={this.likeAction}/>
+                    </div>
+                </div>
+                <style jsx>{threadPostStyle}</style>
+            </div>
+        )
+    }
+};
+
+class PostReplies extends Component {
     constructor() {
         super();
         this.state = {
@@ -392,7 +465,7 @@ class ThreadComments extends Component {
     }
 };
 
-class ThreadComment extends Component {
+class PostReply extends Component {
     constructor() {
         super();
         this.state = {
