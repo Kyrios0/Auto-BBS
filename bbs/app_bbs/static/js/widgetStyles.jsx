@@ -232,6 +232,8 @@ const threadThemeStyle = css`
     .forum-post-header-wrapper {
         font-size: 12px;
         padding: 20px 30px 0 30px;
+        justify-content: space-between;
+        display: flex;
     }
     .forum-post-header {
         color: #999;
@@ -248,12 +250,33 @@ const threadThemeStyle = css`
     }
 `
 //#endregion
-
+//#region likeButtonStyle
+const likeButtonStyle = css`
+    .like-button {
+        display: flex;
+        cursor: pointer;
+    }
+    .like {
+        color: #8590a6 !important;
+    }
+    .svg-wrapper {
+        display: inline-flex;
+        align-items: center;
+    }
+    .is-liked {
+        color: #0084ff !important;
+    }
+    .like-svg {
+        margin-right: 5px;
+    }
+`
+//#endregion
 module.exports = {
     topBarStyle: topBarStyle,
     topBGStyle: topBGStyle,
     threadLineStyle: threadLineStyle,
     forumsStyle: forumsStyle,
     threadThemeStyle: threadThemeStyle,
+    likeButtonStyle: likeButtonStyle, 
 
 }

@@ -4,7 +4,7 @@ import {topbarLink, threadLink, createButtonLink} from "./linkStyles.jsx";
 import {avatarLink, usernameLink} from "./linkStyles.jsx";
 
 import {topBarStyle, topBGStyle, threadLineStyle} from "./widgetStyles.jsx"
-import {forumsStyle, threadThemeStyle} from "./widgetStyles.jsx"
+import {forumsStyle, threadThemeStyle, likeButtonStyle} from "./widgetStyles.jsx"
 
 class TopBar extends Component {
     render() {
@@ -55,7 +55,7 @@ class TopBG extends Component {
 class ThreadLine extends Component {
     render() {
         return (
-            <div className="topic_entry_bg">
+            <div className="topic_entry_bg" key={this.props.topic['tid']}>
                 <div className="topic_entry">
                     <div className="row">
                         <div className="topic_entry_content c1">
@@ -229,6 +229,30 @@ class Thread extends Component {
     }
 };
 
+class LikeButton extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        };
+    }
+
+    render() {
+        return (
+            <div>
+                <a className={(this.props.is_liked?"is-liked":"like")+' '+"like-button"} onClick={this.props.likeAction}>
+                    <span>
+                        <svg className="like-svg" fill="currentColor" width="16" height="16" viewBox="0 0 24 24">
+                            <path d="M14.445 9h5.387s2.997.154 1.95 3.669c-.168.51-2.346 6.911-2.346 6.911s-.763 1.416-2.86 1.416H8.989c-1.498 0-2.005-.896-1.989-2v-7.998c0-.987.336-2.032 1.114-2.639 4.45-3.773 3.436-4.597 4.45-5.83.985-1.13 3.2-.5 3.037 2.362C15.201 7.397 14.445 9 14.445 9zM3 9h2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V10a1 1 0 0 1 1-1z"></path>
+                        </svg>
+                    </span>
+                    {this.props.like_count}
+                </a>
+                <style jsx>{likeButtonStyle}</style>
+            </div>
+        )
+    }
+};
+
 class ThreadTheme extends Component {
     constructor(props) {
         super(props);
@@ -240,9 +264,13 @@ class ThreadTheme extends Component {
             username: "",
             content: "",
             post_time: "",
-            reg_time: ""
+            reg_time: "",
+            like_count: 0,
+            is_liked: false,
+
         };
         this.initTheme = this.initTheme.bind(this);
+        this.likeAction = this.likeAction.bind(this);
         fetch('/api/topic/'+this.state.tid)
         .then(function(response) {
             return response.json()
@@ -258,14 +286,23 @@ class ThreadTheme extends Component {
             username: json['username'],
             content: json['content'],
             post_time: json['post_time'],
-            reg_time: json['reg_time']
+            reg_time: json['reg_time'], 
+            like_count: json['like_count'], 
+            is_liked: json['is_liked']
+        })
+    }
+    likeAction(event) {
+        var like_count = this.state.is_liked ? this.state.like_count-1 : this.state.like_count+1;
+        this.setState({
+            is_liked: this.state.is_liked ^ 1, 
+            like_count: like_count
         })
     }
     render() {
         return (
             <div>
                 <TopBG title={this.state.topic_name}/>
-                <div className="thread">
+                <div className="thread-theme">
                     <div className="forum-post">
                         <div className="forum-post-info lvl1">
                             <div className="forum-post-info-main">
@@ -286,6 +323,7 @@ class ThreadTheme extends Component {
                         </div>
                         <div className="forum-post-body">
                             <div className="forum-post-header-wrapper">
+                                <LikeButton is_liked={this.state.is_liked} like_count={this.state.like_count} likeAction={this.likeAction}/>
                                 <div className="forum-post-header">
                                     {this.state.post_time}
                                 </div>
