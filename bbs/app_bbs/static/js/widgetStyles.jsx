@@ -72,8 +72,8 @@ const topBGStyle = css`
     }
 `
 //#endregion
-//#region threadLineStyle
-const threadLineStyle = css`
+//#region ThreadEntryStyle
+const ThreadEntryStyle = css`
     .topic_entry {
         margin: 0 40px;
     }
@@ -172,82 +172,6 @@ const threadThemeStyle = css`
         display: flex;
         flex-direction: row;
     }
-    .forum-post-info {
-        flex: none;
-        display: flex;
-        flex-direction: column;
-        width: 180px;
-    }
-    .forum-post-body {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-    .forum-post-info-main::before {
-        position: absolute;
-        content: " ";
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        background-image: url(https://osu.ppy.sh/images/backgrounds/button.svg);
-        background-size: 300px;
-        opacity: .5;
-    }
-    .forum-post-info-main {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 20px;
-        background-image: linear-gradient(180deg,transparent,rgba(0,0,0,.2));
-        position: relative;
-    }
-    .lvl1 {
-        background-color: #29b;
-    }
-    .avatar_wrapper {
-        background-size: 153px 83px;
-        padding: 0 30px;
-    }
-    .avatar {
-        width: 100%;
-        border: 5px solid #fff;
-    }
-    .forum-post-info-extra {
-        background-color: hsla(0,0%,100%,.9);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        flex: 1 0 auto;
-        padding: 10px;
-        text-align: center;
-    }
-    .forum-post-info-extra-buttom {
-        font-size: 11px;
-        font-weight: 600;
-        font-style: italic;
-        color: #555;
-        margin-bottom: 5px;
-    }
-    .forum-post-header-wrapper {
-        font-size: 12px;
-        padding: 20px 30px 0 30px;
-        justify-content: space-between;
-        display: flex;
-    }
-    .forum-post-header {
-        color: #999;
-    }
-    .forum-post-content-wrapper {
-        padding: 20px 30px;
-    }
-    .forum-post-content {
-        font-family: Open Sans,sans-serif;
-        line-height: 1.35;
-        color: #444;
-        font-size: 13px;
-        line-height: 1.5;
-    }
 `
 //#endregion
 //#region likeButtonStyle
@@ -271,12 +195,98 @@ const likeButtonStyle = css`
     }
 `
 //#endregion
+//#region posterInfoStyle
+const posterInfoStyle = css`
+    .info {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        width: 180px;
+    }
+    .forum-post-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .info-main::before {
+        position: absolute;
+        content: " ";
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-image: url(https://osu.ppy.sh/images/backgrounds/button.svg);
+        background-size: 300px;
+        opacity: .5;
+    }
+    .info-main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+        background-image: linear-gradient(180deg,transparent,rgba(0,0,0,.2));
+        position: relative;
+    }
+    .lvl1 {
+        background-color: #29b;
+    }
+    .avatar_wrapper {
+        background-size: 153px 83px;
+        padding: 0 30px;
+    }
+    .avatar {
+        width: 100%;
+        border: 5px solid #fff;
+    }
+    .info-extra {
+        background-color: hsla(0,0%,100%,.9);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex: 1 0 auto;
+        padding: 10px;
+        text-align: center;
+    }
+    .info-extra-buttom {
+        font-size: 11px;
+        font-weight: 600;
+        font-style: italic;
+        color: #555;
+        margin-bottom: 5px;
+    }
+`
+//#endregion
+//#region postBodyStyle
+const postBodyStyle = css`
+    .header-wrapper {
+        font-size: 12px;
+        padding: 20px 30px 0 30px;
+        justify-content: space-between;
+        display: flex;
+    }
+    .header {
+        color: #999;
+    }
+    .content-wrapper {
+        padding: 20px 30px;
+    }
+    .content {
+        font-family: Open Sans,sans-serif;
+        line-height: 1.35;
+        color: #444;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+`
+//#endregion
 module.exports = {
     topBarStyle: topBarStyle,
     topBGStyle: topBGStyle,
-    threadLineStyle: threadLineStyle,
+    ThreadEntryStyle: ThreadEntryStyle,
     forumsStyle: forumsStyle,
     threadThemeStyle: threadThemeStyle,
     likeButtonStyle: likeButtonStyle, 
+    posterInfoStyle: posterInfoStyle, 
+    postBodyStyle: postBodyStyle,
 
 }
