@@ -4,6 +4,7 @@ node_modules/
 bbs/app_bbs/static/js/*.js
 .idea/
 bbs/.idea/
+bbs/config.py
 
 *.bak
 *.pyc
