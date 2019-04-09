@@ -1,0 +1,52 @@
+{
+  "name": "autobbs",
+  "version": "1.0.0",
+  "description": "UESTC SCSE 2019 System Level Comprehensive Software Design Project",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kyrios0/Auto-BBS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kyrios0/Auto-BBS/issues"
+  },
+  "homepage": "https://github.com/Kyrios0/Auto-BBS#readme",
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "create-react-class": "^15.6.3",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "styled-jsx": "^3.2.1",
+    "webpack": "^4.29.6"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "react"
+    ],
+    "plugins": [
+      [
+        "styled-jsx/babel",
+        {
+          "optimizeForSpeed": true
+        }
+      ]
+    ]
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.2.3"
+  }
+}

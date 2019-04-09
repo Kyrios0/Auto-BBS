@@ -1,2 +1,9 @@
 venv/
+node_modules/
+.vscode/
+bbs/app_bbs/static/js/*.js
+
+
 *.bak
+*.pyc
+*.pyo
