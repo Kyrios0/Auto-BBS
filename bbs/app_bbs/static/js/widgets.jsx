@@ -6,33 +6,217 @@ import {avatarLink, usernameLink} from "./linkStyles.jsx";
 import {topBarStyle, topBGStyle, ThreadEntryStyle} from "./widgetStyles.jsx"
 import {forumsStyle, threadThemeStyle, likeButtonStyle} from "./widgetStyles.jsx"
 import {posterInfoStyle, postBodyStyle, threadPostStyle} from "./widgetStyles.jsx"
+import {panelStyle, panelBoxStyle, normalButtonStyle} from "./widgetStyles.jsx"
 
 class TopBar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            panel: false,
+        };
+    }
+    showPanel() {
+        this.setState({panel: this.state.panel ^ 1})
+    }
     render() {
         return (
-            <div id="mainmenu">
-                <div className="nav">
-                    <div className="left">
-                        <div className="ul">
-                            <div className="li">
-                                <Link to="/" className={`link ${topbarLink.className}`}>
-                                    <img style={{height: 50+'px'}} src="https://blog.kyrios.cn/wp-content/uploads/2019/04/auto-bbs.png"/>
-                                </Link>
+            <div>
+                <div id="mainmenu">
+                    <div className="nav">
+                        <div className="left">
+                            <div className="ul">
+                                <div className="li">
+                                    <Link to="/" className={`link ${topbarLink.className}`}>
+                                        <img style={{height: 50+'px'}} src="https://blog.kyrios.cn/wp-content/uploads/2019/04/auto-bbs.png"/>
+                                    </Link>
+                                </div>
+                                <div className="li">
+                                    <Link to="/" className={`link ${topbarLink.className}`}>Home</Link>
+                                </div>
+                                <div className="li">
+                                    <Link to="/about" className={`link ${topbarLink.className}`}>About</Link>
+                                </div>
                             </div>
+                        </div>
+                        <div className="right">
                             <div className="li">
-                                <Link to="/" className={`link ${topbarLink.className}`}>Home</Link>
+                                <div
+                                    className="active link"
+                                    onClick={this.showPanel.bind(this)}>
+                                    Login
+                                </div>
                             </div>
-                            <div className="li">
-                                <Link to="/about" className={`link ${topbarLink.className}`}>About</Link>
+                            <div>
+                                <LoginRegisterPanel visible={this.state.panel}/>
                             </div>
                         </div>
                     </div>
-                    <div className="right">
-                        <div className="li"><Link className={`active link ${topbarLink.className}`} to="/login">Login</Link></div>
-                    </div>
+                    {topbarLink.styles}
+                    <style jsx>{topBarStyle}</style>
                 </div>
-                {topbarLink.styles}
-                <style jsx>{topBarStyle}</style>
+                
+            </div>
+        )
+    }
+};
+
+class LoginRegisterPanel extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loginActive: true,
+        };
+        this.showLoginBox = this.showLoginBox.bind(this)
+        this.showRegisterBox = this.showRegisterBox.bind(this)
+    }
+    showLoginBox() {
+        this.setState({loginActive: true})
+    }
+    showRegisterBox() {
+        this.setState({loginActive: false})
+    }
+    render() {
+        return (
+            <div className="panel-wrapper">
+                { 
+                    this.props.visible
+                    ?
+                        <div className="lr-panel">
+                            <div className="lr-panel-content">
+                                <div className="box-controller">
+                                    <div 
+                                        className={"controller " + (this.state.loginActive
+                                            ? "selected" : "")} 
+                                        onClick={this.showLoginBox}>
+                                        Login
+                                    </div>
+                                    <div
+                                        className={"controller " + (this.state.loginActive 
+                                            ? "" : "selected")}
+                                        onClick={this.showRegisterBox}>
+                                        Register
+                                    </div>
+                                </div>
+                                <div>
+                                    {this.state.loginActive ? <LoginBox/> : <RegisterBox/>}
+                                </div>
+                            </div>
+                        </div>
+                    :   
+                        <div></div>
+                }
+                <style jsx>{panelStyle}</style>
+            </div>
+        );
+    }
+};
+
+class NormalButton extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return (
+            <div className="nb" onClick={this.props.onClick}>
+                {this.props.name}
+                <style jsx> {normalButtonStyle} </style>
+            </div>
+            
+        )
+    }
+};
+
+class LoginBox extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: "",
+            password: "",
+        };
+        this.validateForm = this.validateForm.bind(this)
+        this.handleChange = this.handleChange.bind(this)
+        this.login = this.login.bind(this)
+    }
+    validateForm() {
+        return this.state.email.length > 0 && this.state.password.length > 0;
+    }
+    handleChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    }
+    login(e) {
+        e.preventDefault();
+        {/* To-Do: need login API */}
+        console.log("[l]: email: %s, password: %s", this.state.email, this.state.password)
+        if(this.validateForm()){
+            console.log("login success.")
+        }
+    }
+    render() {
+        return (
+            <div className="panel-box">
+                <input 
+                    name="email"
+                    placeholder="Email" 
+                    onChange={this.handleChange}/>
+                <input
+                    name="password"
+                    placeholder="Password"
+                    type="password"
+                    onChange={this.handleChange}/>
+                <div className="panel-box-buttom">
+                    <NormalButton onClick={this.login} name="Login" />
+                </div>
+                <style jsx>{panelBoxStyle}</style>
+            </div>
+        )
+    }
+};
+
+class RegisterBox extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: "",
+            password: "",
+        };
+        this.validateForm = this.validateForm.bind(this)
+        this.handleChange = this.handleChange.bind(this)
+        this.register = this.register.bind(this)
+    }
+    validateForm() {
+        return this.state.email.length > 0 && this.state.password.length > 0;
+    }
+    handleChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    }
+    register(e) {
+        e.preventDefault();
+        {/* To-Do: need register API */}
+        console.log("[r]: email: %s, password: %s", this.state.email, this.state.password)
+        if(this.validateForm()){
+            console.log("register success.")
+        }
+    }
+    render() {
+        return (
+            <div className="panel-box">
+                <input 
+                    name="email"
+                    placeholder="Email" 
+                    onChange={this.handleChange}/>
+                <input
+                    name="password"
+                    placeholder="Password"
+                    type="password"
+                    onChange={this.handleChange}/>
+                <div className="panel-box-buttom">
+                    <NormalButton onClick={this.register} name="Register" />
+                </div>
+                <style jsx>{panelBoxStyle}</style>
             </div>
         )
     }

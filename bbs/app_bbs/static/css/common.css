@@ -21,9 +21,9 @@ body:before {
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: url(https://osu.ppy.sh/images/backgrounds/page-light.png);
+    background-image: url(https://osu.ppy.sh/images/backgrounds/page-222.png);
     background-size: 500px 500px;
-    opacity: .55;
+    opacity: .95;
 }
 
 p {
