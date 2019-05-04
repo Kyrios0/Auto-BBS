@@ -4,6 +4,8 @@ from sqlalchemy.dialects.mysql import BIT, INTEGER, MEDIUMTEXT
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.exc import IntegrityError
+
 import config
 
 Base = declarative_base()
