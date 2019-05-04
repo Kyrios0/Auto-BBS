@@ -13,6 +13,7 @@ const topBarStyle = css`
         display: flex;
     }
     .right {
+        height: 53px;
         margin-left: auto;
     }
     .ul {
@@ -26,9 +27,9 @@ const topBarStyle = css`
         display: block;
         color: white;
         text-align: center;
-        padding: 5px 16px;
+        padding: 0px 16px;
         text-decoration: none;
-        line-height: 55px;
+        line-height: 53px;
     } 
     .link:hover:not(.active) {
         background-color: rgb(40, 40, 40);
@@ -47,7 +48,7 @@ const topBarStyle = css`
 const panelStyle = css`
     .panel-wrapper {
         left: -235px;
-        margin-top: 65px;
+        margin-top: 53px;
     }
     .lr-panel {
         position: fixed;
