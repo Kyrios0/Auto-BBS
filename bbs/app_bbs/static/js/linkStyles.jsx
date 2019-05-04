@@ -21,6 +21,7 @@ const topbarLink = resolveScopeStyles(
             .link:hover:not(.active) {
                 background-color: rgb(40, 40, 40);
             }
+            {/* below part has been removed in widgets*/}
             .link.active {
                 background-color: #591804;
                 color: #fff;
