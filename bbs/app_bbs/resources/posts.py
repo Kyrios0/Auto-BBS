@@ -4,7 +4,7 @@ from flask import session, request, jsonify
 from common import *
 
 
-class Posts_api(Resource):
+class PostsApi(Resource):
     def get(self, tid):
         '''
         topic_comment: comment reply to topic directly

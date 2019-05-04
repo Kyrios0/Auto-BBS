@@ -3,7 +3,8 @@ from app_bbs.models.models import *
 from flask import session, request, abort,jsonify
 from common import *
 
-class Topic_api(Resource):
+
+class TopicApi(Resource):
     """
     API for /api/topic
     """

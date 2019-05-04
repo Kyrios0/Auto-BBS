@@ -3,7 +3,8 @@ from app_bbs.models.models import *
 from flask import session, request, jsonify
 from common import *
 
-class Login_api(Resource):
+
+class LoginApi(Resource):
     def post(self):
         username = request.json.get('username')
         password = request.json.get('password')

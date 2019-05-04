@@ -3,7 +3,8 @@ from app_bbs.models.models import *
 from flask import session, request, jsonify
 from common import *
 
-class Agree_api(Resource):
+
+class AgreeApi(Resource):
     def get(self, tid, rid = None, rrid = None):
         cid = rrid if rrid else rid
         if rrid or rid:

@@ -10,14 +10,14 @@ app = Flask(__name__)
 api = Api(app)
 app.config.from_object(config)
 
-api.add_resource(Topic_api, '/api/topic', '/api/topic/<int:tid>', '/api/topic/page/<int:page_num>')
-api.add_resource(Login_api, '/api/login')
-api.add_resource(User_api, '/api/users', '/api/users/<int:uid>')
-api.add_resource(Posts_api, '/api/posts/<int:tid>',
+api.add_resource(TopicApi, '/api/topic', '/api/topic/<int:tid>', '/api/topic/page/<int:page_num>')
+api.add_resource(LoginApi, '/api/login')
+api.add_resource(UserApi, '/api/users', '/api/users/<int:uid>')
+api.add_resource(PostsApi, '/api/posts/<int:tid>',
                  '/api/posts/<int:tid>/<int:rid>',
                  '/api/posts/<int:tid>/<int:rid>/<int:rrid>')
 
-api.add_resource(Agree_api, '/api/agree/<int:tid>',
+api.add_resource(AgreeApi, '/api/agree/<int:tid>',
                  '/api/agree/<int:tid>/<int:rid>',
                  '/api/agree/<int:tid>/<int:rid>/<int:rrid>')
 
