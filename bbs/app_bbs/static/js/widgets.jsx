@@ -660,8 +660,8 @@ class PostReplies extends Component {
 };
 
 class PostReply extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             uid: this.props.reply['uid'], 
             username: this.props.reply['username'], 
