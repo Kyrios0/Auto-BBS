@@ -12,7 +12,7 @@ def md5(src):
 
 def login_required(func):
     def wrapper(*args, **kwargs):
-        if session.get('uid') is None:
+        if session.get('uid') is None or session.get('is_login') == 0:
             return jsonify({"message": "Login Required!"})
         else:
             return func(*args, **kwargs)
