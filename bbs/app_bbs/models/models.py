@@ -25,7 +25,8 @@ class User(Base):
     is_admin = Column(BIT(1))
     username = Column(String(255), nullable=False)
     password = Column(String(255), nullable=False)
-
+    reg_time = Column(DateTime, nullable=False)
+    selfinfo = Column(String(255))
 
 class Topic(Base):
     __tablename__ = 'topic'

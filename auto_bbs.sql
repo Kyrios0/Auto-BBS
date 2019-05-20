@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version: 5.5.53)
-# Date: 2019-05-13 12:34:00
+# Date: 2019-05-20 19:16:50
 # Generator: MySQL-Front 5.3  (Build 4.234)
 
 /*!40101 SET NAMES utf8 */;
@@ -18,6 +18,8 @@ CREATE TABLE `user` (
   `is_admin` bit(1) DEFAULT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `reg_time` datetime,
+  `selfinfo` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
@@ -25,7 +27,7 @@ CREATE TABLE `user` (
 # Data for table "user"
 #
 
-INSERT INTO `user` VALUES (1,'blacsheep','/etc/passwd','110@qq.com','110',b'0','blacsheep','38bc96c0154510d6e79be5f559ae7b66'),(2,'kyr1os','/etc/passwd','120@qq.com','120',b'1','kyr1os','38bc96c0154510d6e79be5f559ae7b66'),(3,'TGWarwolf','/etc/passwd','119@qq.com','119',b'1','TGWarwolf','38bc96c0154510d6e79be5f559ae7b66'),(4,'EliAyase','/etc/passwd','520@qq.com','520',b'1','EliAyase','38bc96c0154510d6e79be5f559ae7b66'),(5,'dujianguai','/uploads/default.jpg','13333@qq.com','123456',b'0','suibianquyige','38bc96c0154510d6e79be5f559ae7b66');
+INSERT INTO `user` VALUES (1,'blacsheep','/etc/passwd','110@qq.com','110',b'0','blacsheep','38bc96c0154510d6e79be5f559ae7b66','2019-05-20 19:16:21','blacsheep is cool'),(2,'kyr1os','/etc/passwd','120@qq.com','120',b'1','kyr1os','38bc96c0154510d6e79be5f559ae7b66','2019-05-20 19:16:21','kyr1os is cool'),(3,'TGWarwolf','/etc/passwd','119@qq.com','119',b'1','TGWarwolf','38bc96c0154510d6e79be5f559ae7b66','2019-05-20 19:16:21','TGWarwolf is cool'),(4,'EliAyase','/etc/passwd','520@qq.com','520',b'1','EliAyase','38bc96c0154510d6e79be5f559ae7b66','2019-05-20 19:16:21','EliAyase is ugly'),(5,'dujianguai','/uploads/default.jpg','13333@qq.com','123456',b'0','suibianquyige','38bc96c0154510d6e79be5f559ae7b66','2019-05-20 19:16:21','dujianguai is cool');
 
 #
 # Structure for table "topic"
