@@ -46,8 +46,11 @@ const topBarStyle = css`
 //#endregion
 //#region panelStyle
 const panelStyle = css`
-    .panel-wrapper {
+    .lr-panel-wrapper {
         left: -235px;
+        margin-top: 53px;
+    }
+    .um-panel-wrapper {
         margin-top: 53px;
     }
     .lr-panel {
@@ -64,6 +67,15 @@ const panelStyle = css`
         font-size: 12px;
         background-color: #333;
         padding: 20px 20px 0;
+    }
+    .um-panel-content {
+        width: 150px;
+        margin-top: 5px;
+        border-radius: 6px;
+        display: flex;
+        flex-direction: column;
+        font-size: 14px;
+        background-color: #222;
     }
     .box-controller {
         color: #fff;
@@ -225,7 +237,7 @@ const ThreadEntryStyle = css`
         text-align: left;
     }
     .c3, .c4 {
-        width: 140px;
+        width: 150px;
         text-align: right;
         color: #58697b;
         font-size: 0.923em;

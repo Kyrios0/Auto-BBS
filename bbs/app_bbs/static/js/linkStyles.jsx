@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 function resolveScopeStyles(scope) {
     return {
@@ -120,10 +120,21 @@ const usernameLink = resolveScopeStyles(
     </div>
 )
 
+const userMenuLink = resolveScopeStyles(
+    <div>
+        <style jsx>{`
+            .menu {
+
+            }
+        `}</style>
+    </div>
+)
+
 module.exports = {
     topbarLink: topbarLink,
     threadLink: threadLink,
     createButtonLink: createButtonLink, 
     avatarLink: avatarLink, 
-    usernameLink: usernameLink, 
+    usernameLink: usernameLink,
+    userMenuLink: userMenuLink, 
 }
