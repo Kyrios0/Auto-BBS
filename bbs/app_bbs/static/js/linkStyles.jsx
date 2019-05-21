@@ -124,7 +124,12 @@ const userMenuLink = resolveScopeStyles(
     <div>
         <style jsx>{`
             .menu {
-
+                padding: 5px 25px;
+                color: #fff;
+                text-decoration: none;
+            }
+            .menu:hover {
+                background-color: #111;
             }
         `}</style>
     </div>

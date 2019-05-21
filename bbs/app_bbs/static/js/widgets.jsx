@@ -3,10 +3,11 @@ import {Link} from 'react-router-dom';
 import {topbarLink, threadLink, createButtonLink} from "./linkStyles.jsx";
 import {avatarLink, usernameLink, userMenuLink} from "./linkStyles.jsx";
 
-import {topBarStyle, topBGStyle, ThreadEntryStyle} from "./widgetStyles.jsx"
+import {topBarStyle, topBGStyle, threadEntryStyle} from "./widgetStyles.jsx"
 import {forumsStyle, threadThemeStyle, likeButtonStyle} from "./widgetStyles.jsx"
 import {posterInfoStyle, postBodyStyle, threadPostStyle} from "./widgetStyles.jsx"
 import {panelStyle, panelBoxStyle, normalButtonStyle} from "./widgetStyles.jsx"
+import {createTopicStyle, } from "./widgetStyles.jsx"
 
 var bindURL = "http://119.28.22.85:6712";
 
@@ -133,7 +134,7 @@ class UserMenuPanel extends Component {
                     :   
                         <div></div>
                 }
-                {usernameLink.styles}
+                {userMenuLink.styles}
                 <style jsx>{panelStyle}</style>
             </div>
         );
@@ -322,7 +323,7 @@ class RegisterBox extends Component {
             <div className="panel-box">
                 <input 
                     name="username"
-                    placeholder="username" 
+                    placeholder="Username" 
                     onChange={this.handleChange}/>
                 <input
                     name="password"
@@ -343,7 +344,7 @@ class TopBG extends Component {
         return (
             <div className="head_bg">
                 <div className="title_wrapper">
-                    <div className={this.props.title.length?"title-text":"title-image"}>
+                    <div className={this.props.title?"title-text":"title-image"}>
                         {this.props.title}
                     </div>
                 </div>
@@ -386,7 +387,7 @@ class ThreadEntry extends Component {
                     </div>
                 </div>
                 {threadLink.styles}
-                <style jsx>{ThreadEntryStyle}</style>
+                <style jsx>{threadEntryStyle}</style>
             </div>
         )
     }
@@ -583,6 +584,90 @@ class LikeButton extends Component {
     }
 };
 
+class CreateTopic extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            topic_name: "",
+            content: "",
+            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+            uid: "",
+            nickname: "",
+            reg_time: "",
+        };
+        this.initUserInfo = this.initUserInfo.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        fetch(bindURL + '/users')
+        .then(function(response) {
+            return response.json()
+        })
+        .then(this.initUserInfo).catch(function(ex) {
+            console.log('Init user info failed', ex)
+        })
+    }
+    initUserInfo(json) {
+        this.setState({
+            uid: json['uid'],
+            nickname: json['nickname'],
+            reg_time: json['reg_time'], 
+        })
+    }
+    handleChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    }
+    render() {
+        var titleInput = (
+            <React.Fragment>
+                <input 
+                    name="topic_name"
+                    placeholder="Click here to set title"
+                    maxLength="100"
+                    className='title-input'
+                    onChange={this.handleChange}/>
+                <style jsx>{createTopicStyle}</style>
+            </React.Fragment>
+            
+        );
+        var contentInput = (
+            <React.Fragment>
+                <textarea 
+                    name="content"
+                    placeholder="Type post content here"
+                    className='content-input'
+                    onChange={this.handleChange}/>
+                <style jsx>{createTopicStyle}</style>
+            </React.Fragment>
+        );
+        return (
+            <div>
+                <TopBG title={titleInput} />
+                <div className="thread-theme">
+                    <div className="forum-post">
+                        <PosterInfo uid={this.state.uid} username={this.state.nickname} reg_time={this.state.reg_time} avatar={this.state.avatar} lvl="lvl1"/>
+                        <div className="forum-post-body">
+                            <div className="content-wrapper">
+                                <div className="content">
+                                    {contentInput}
+                                </div>
+                            </div>
+                            <div className="edit-bar">
+                                <div className="editor-footer">
+                                    <NormalButton name="Post"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <style jsx>{createTopicStyle}</style>
+                    <style jsx>{postBodyStyle}</style>
+                    <style jsx>{threadThemeStyle}</style>
+                </div>
+            </div>
+        )
+    }
+};
+
 class PosterInfo extends Component {
     constructor(props) {
         super(props);
@@ -642,7 +727,7 @@ class PostBody extends Component {
         )
     }
 };
-
+ 
 class ThreadTheme extends Component {
     constructor(props) {
         super(props);
@@ -856,4 +941,5 @@ module.exports = {
     User: User,
     Thread: Thread,
     Account: Account,
+    CreateTopic: CreateTopic,
 }

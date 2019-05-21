@@ -76,6 +76,15 @@ const panelStyle = css`
         flex-direction: column;
         font-size: 14px;
         background-color: #222;
+        padding: 20px 5px;
+    }
+    .um-panel-menu {
+        padding: 5px 25px;
+        color: #fff;
+    }
+    .um-panel-menu:hover {
+        background: #111;
+        cursor: pointer;
     }
     .box-controller {
         color: #fff;
@@ -191,8 +200,8 @@ const topBGStyle = css`
     }
 `
 //#endregion
-//#region ThreadEntryStyle
-const ThreadEntryStyle = css`
+//#region threadEntryStyle
+const threadEntryStyle = css`
     .topic_entry {
         margin: 0 40px;
     }
@@ -284,6 +293,9 @@ const threadThemeStyle = css`
         margin-bottom: 5px;
         display: flex;
         flex-direction: row;
+    }
+    .forum-post-body {
+        width: 100%;
     }
 `
 //#endregion
@@ -410,18 +422,52 @@ const threadPostStyle = css`
     }
 `
 //#endregion
+//#region createTopicStyle
+const createTopicStyle = css`
+    .title-input {
+        background: none;
+        border: none;
+        outline: none;
+        color: #fff;
+        width: 100%;
+        font-weight: 500;
+        font-size: 36px;
+        font-style: italic;
+    }
+    .content-input {
+        min-height: 300px;
+        outline: none;
+        border: none;
+        background: none;
+        resize: vertical;
+        width: 100%;
+        font-size: 13px;
+        font-family: Menlo,Monaco,Consolas,Courier New,monospace;
+    }
+    .edit-bar {
+        background-color: #444;
+        padding: 10px 30px;
+    }
+    .editor-footer {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+`
+//#endregion
 module.exports = {
     topBarStyle: topBarStyle,
     panelStyle: panelStyle,
     panelBoxStyle: panelBoxStyle,
     normalButtonStyle, normalButtonStyle,
     topBGStyle: topBGStyle,
-    ThreadEntryStyle: ThreadEntryStyle,
+    threadEntryStyle: threadEntryStyle,
     forumsStyle: forumsStyle,
     threadThemeStyle: threadThemeStyle,
     likeButtonStyle: likeButtonStyle, 
     posterInfoStyle: posterInfoStyle, 
     postBodyStyle: postBodyStyle,
     threadPostStyle: threadPostStyle, 
-
+    createTopicStyle: createTopicStyle,
 }
