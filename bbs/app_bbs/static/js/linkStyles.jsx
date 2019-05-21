@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 function resolveScopeStyles(scope) {
     return {
@@ -14,9 +14,9 @@ const topbarLink = resolveScopeStyles(
                 display: block;
                 color: white;
                 text-align: center;
-                padding: 5px 16px;
+                padding: 0px 16px;
                 text-decoration: none;
-                line-height: 55px;
+                line-height: 53px;
             } 
             .link:hover:not(.active) {
                 background-color: rgb(40, 40, 40);
@@ -120,10 +120,26 @@ const usernameLink = resolveScopeStyles(
     </div>
 )
 
+const userMenuLink = resolveScopeStyles(
+    <div>
+        <style jsx>{`
+            .menu {
+                padding: 5px 25px;
+                color: #fff;
+                text-decoration: none;
+            }
+            .menu:hover {
+                background-color: #111;
+            }
+        `}</style>
+    </div>
+)
+
 module.exports = {
     topbarLink: topbarLink,
     threadLink: threadLink,
     createButtonLink: createButtonLink, 
     avatarLink: avatarLink, 
-    usernameLink: usernameLink, 
+    usernameLink: usernameLink,
+    userMenuLink: userMenuLink, 
 }

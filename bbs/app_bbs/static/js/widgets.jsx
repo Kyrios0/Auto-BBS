@@ -1,19 +1,54 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {topbarLink, threadLink, createButtonLink} from "./linkStyles.jsx";
-import {avatarLink, usernameLink} from "./linkStyles.jsx";
+import {avatarLink, usernameLink, userMenuLink} from "./linkStyles.jsx";
 
-import {topBarStyle, topBGStyle, ThreadEntryStyle} from "./widgetStyles.jsx"
+import {topBarStyle, topBGStyle, threadEntryStyle} from "./widgetStyles.jsx"
 import {forumsStyle, threadThemeStyle, likeButtonStyle} from "./widgetStyles.jsx"
 import {posterInfoStyle, postBodyStyle, threadPostStyle} from "./widgetStyles.jsx"
 import {panelStyle, panelBoxStyle, normalButtonStyle} from "./widgetStyles.jsx"
+import {createTopicStyle, } from "./widgetStyles.jsx"
+
+var bindURL = "http://119.28.22.85:6712";
+
+function getCookieItem(sKey) {
+    return document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + sKey.replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1");
+}
+
+function isLogin() {
+    return getCookieItem('isLogin') == 'true';
+}
 
 class TopBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
             panel: false,
+            focusText: 'Login',
+            uid: -1,
+            user: null,
         };
+        this.initTopbar = this.initTopbar.bind(this);
+        this.showPanel = this.showPanel.bind(this);
+        if (isLogin()) {
+            fetch(bindURL + '/api/users', {
+                credentials: 'include',
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(this.initTopbar)
+            .catch(function(ex) {
+                console.log('Init topbar failed', ex)
+            })
+        }
+    }
+    initTopbar(json) {
+        this.setState({
+            uid: json['uid'],
+            focusText: json['nickname'],
+            user: json
+        })
     }
     showPanel() {
         this.setState({panel: this.state.panel ^ 1})
@@ -42,12 +77,22 @@ class TopBar extends Component {
                             <div className="li">
                                 <div
                                     className="active link"
-                                    onClick={this.showPanel.bind(this)}>
-                                    Login
+                                    onClick={this.showPanel}>
+                                    { this.state.focusText }
                                 </div>
                             </div>
                             <div>
-                                <LoginRegisterPanel visible={this.state.panel}/>
+                                {
+                                    isLogin()
+                                    ?
+                                        this.state.user
+                                        ?
+                                            <UserMenuPanel visible={this.state.panel} user={this.state.user}/>
+                                        :
+                                            <div></div>
+                                    :
+                                        <LoginRegisterPanel visible={this.state.panel}/>
+                                }
                             </div>
                         </div>
                     </div>
@@ -57,6 +102,42 @@ class TopBar extends Component {
                 
             </div>
         )
+    }
+};
+
+class UserMenuPanel extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            uid: this.props.user['uid']
+        };
+    }
+    render() {
+        return (
+            <div className="um-panel-wrapper">
+                { 
+                    this.props.visible
+                    ?
+                        <div className="lr-panel">
+                            <div className="um-panel-content">
+                                <Link to={'/users/'+this.state.uid} className={`menu ${userMenuLink.className}`}>
+                                    Info
+                                </Link>
+                                <Link to={'/account'} className={`menu ${userMenuLink.className}`}>
+                                    Setting
+                                </Link>
+                                <div className='um-panel-menu' onClick={this.logout}>
+                                    Logout
+                                </div>
+                            </div>
+                        </div>
+                    :   
+                        <div></div>
+                }
+                {userMenuLink.styles}
+                <style jsx>{panelStyle}</style>
+            </div>
+        );
     }
 };
 
@@ -77,7 +158,7 @@ class LoginRegisterPanel extends Component {
     }
     render() {
         return (
-            <div className="panel-wrapper">
+            <div className="lr-panel-wrapper">
                 { 
                     this.props.visible
                     ?
@@ -130,7 +211,7 @@ class LoginBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: "",
+            username: "",
             password: "",
         };
         this.validateForm = this.validateForm.bind(this)
@@ -138,7 +219,7 @@ class LoginBox extends Component {
         this.login = this.login.bind(this)
     }
     validateForm() {
-        return this.state.email.length > 0 && this.state.password.length > 0;
+        return this.state.username.length > 0 && this.state.password.length > 0;
     }
     handleChange(event) {
         this.setState({
@@ -147,18 +228,37 @@ class LoginBox extends Component {
     }
     login(e) {
         e.preventDefault();
-        {/* To-Do: need login API */}
-        console.log("[l]: email: %s, password: %s", this.state.email, this.state.password)
+        {/* WARNING!!: Delete DEBUG line after development plz. */}
+        console.log("[l]: username: %s, password: %s", this.state.username, this.state.password)
         if(this.validateForm()){
-            console.log("login success.")
+            fetch(bindURL + "/api/login", {
+                method: 'POST',
+                headers: new Headers({
+                    'content-type': 'application/json',
+                }),
+                credentials: 'include',
+                mode: 'cors',
+                body: JSON.stringify({
+                    'username': this.state.username,
+                    'password': this.state.password
+                })
+            })
+            .then(function(response) {
+                if (response.status == 200) {
+                    console.log("Login Success.")
+                    location.replace(location.href);
+                } else {
+                    console.log('Login Failed.')
+                }
+            })
         }
     }
     render() {
         return (
             <div className="panel-box">
                 <input 
-                    name="email"
-                    placeholder="Email" 
+                    name="username"
+                    placeholder="Username" 
                     onChange={this.handleChange}/>
                 <input
                     name="password"
@@ -178,7 +278,7 @@ class RegisterBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: "",
+            username: "",
             password: "",
         };
         this.validateForm = this.validateForm.bind(this)
@@ -186,7 +286,7 @@ class RegisterBox extends Component {
         this.register = this.register.bind(this)
     }
     validateForm() {
-        return this.state.email.length > 0 && this.state.password.length > 0;
+        return this.state.username.length > 0 && this.state.password.length > 0;
     }
     handleChange(event) {
         this.setState({
@@ -195,18 +295,35 @@ class RegisterBox extends Component {
     }
     register(e) {
         e.preventDefault();
-        {/* To-Do: need register API */}
-        console.log("[r]: email: %s, password: %s", this.state.email, this.state.password)
+        {/* WARNING!!: Delete DEBUG line after development plz. */}
+        console.log("[r]: username: %s, password: %s", this.state.username, this.state.password)
         if(this.validateForm()){
-            console.log("register success.")
+            fetch(bindURL + "/api/users", {
+                method: 'POST',
+                headers: new Headers({
+                    'content-type': 'application/json',
+                }),
+                mode: 'cors',
+                body: JSON.stringify({
+                    'username': this.state.username,
+                    'password': this.state.password
+                })
+            })
+            .then(function(response) {
+                if (response.status == 200) {
+                    console.log("Register Success.")
+                } else {
+                    console.log('Register Failed.')
+                }
+            })
         }
     }
     render() {
         return (
             <div className="panel-box">
                 <input 
-                    name="email"
-                    placeholder="Email" 
+                    name="username"
+                    placeholder="Username" 
                     onChange={this.handleChange}/>
                 <input
                     name="password"
@@ -227,7 +344,7 @@ class TopBG extends Component {
         return (
             <div className="head_bg">
                 <div className="title_wrapper">
-                    <div className={this.props.title.length?"title-text":"title-image"}>
+                    <div className={this.props.title?"title-text":"title-image"}>
                         {this.props.title}
                     </div>
                 </div>
@@ -270,7 +387,7 @@ class ThreadEntry extends Component {
                     </div>
                 </div>
                 {threadLink.styles}
-                <style jsx>{ThreadEntryStyle}</style>
+                <style jsx>{threadEntryStyle}</style>
             </div>
         )
     }
@@ -283,11 +400,14 @@ class Forums extends Component {
             topics: [], 
         };
         this.initTopic = this.initTopic.bind(this);
-        fetch('/api/topic')
+        fetch(bindURL + '/api/topic', {
+            credentials: 'include',
+        })
         .then(function(response) {
             return response.json()
         })
-        .then(this.initTopic).catch(function(ex) {
+        .then(this.initTopic)
+        .catch(function(ex) {
             console.log('Init topic failed', ex)
         })
     }
@@ -334,6 +454,21 @@ class About extends Component {
     }
 };
 
+class Account extends Component {
+    constructor() {
+        super();
+        this.state = {
+        };
+    }
+
+    render() {
+        return (
+            <div>
+            </div>
+        )
+    }
+};
+
 class User extends Component {
     constructor(props) {
         super(props);
@@ -344,9 +479,19 @@ class User extends Component {
     render() {
         return (
             <div>
-                <UserInfo/>
-                <RelateActive/>
-                <HighLights/>
+                {
+                    isLogin()
+                    ?
+                        <div>
+                            <UserInfo/>
+                            <RelateActive/>
+                            <HighLights/>
+                        </div>
+                    :
+                        <div>
+                            'Please Login First.'
+                        </div>
+                }
             </div>
         )
     }
@@ -439,6 +584,90 @@ class LikeButton extends Component {
     }
 };
 
+class CreateTopic extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            topic_name: "",
+            content: "",
+            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+            uid: "",
+            nickname: "",
+            reg_time: "",
+        };
+        this.initUserInfo = this.initUserInfo.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        fetch(bindURL + '/users')
+        .then(function(response) {
+            return response.json()
+        })
+        .then(this.initUserInfo).catch(function(ex) {
+            console.log('Init user info failed', ex)
+        })
+    }
+    initUserInfo(json) {
+        this.setState({
+            uid: json['uid'],
+            nickname: json['nickname'],
+            reg_time: json['reg_time'], 
+        })
+    }
+    handleChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    }
+    render() {
+        var titleInput = (
+            <React.Fragment>
+                <input 
+                    name="topic_name"
+                    placeholder="Click here to set title"
+                    maxLength="100"
+                    className='title-input'
+                    onChange={this.handleChange}/>
+                <style jsx>{createTopicStyle}</style>
+            </React.Fragment>
+            
+        );
+        var contentInput = (
+            <React.Fragment>
+                <textarea 
+                    name="content"
+                    placeholder="Type post content here"
+                    className='content-input'
+                    onChange={this.handleChange}/>
+                <style jsx>{createTopicStyle}</style>
+            </React.Fragment>
+        );
+        return (
+            <div>
+                <TopBG title={titleInput} />
+                <div className="thread-theme">
+                    <div className="forum-post">
+                        <PosterInfo uid={this.state.uid} username={this.state.nickname} reg_time={this.state.reg_time} avatar={this.state.avatar} lvl="lvl1"/>
+                        <div className="forum-post-body">
+                            <div className="content-wrapper">
+                                <div className="content">
+                                    {contentInput}
+                                </div>
+                            </div>
+                            <div className="edit-bar">
+                                <div className="editor-footer">
+                                    <NormalButton name="Post"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <style jsx>{createTopicStyle}</style>
+                    <style jsx>{postBodyStyle}</style>
+                    <style jsx>{threadThemeStyle}</style>
+                </div>
+            </div>
+        )
+    }
+};
+
 class PosterInfo extends Component {
     constructor(props) {
         super(props);
@@ -498,7 +727,7 @@ class PostBody extends Component {
         )
     }
 };
-
+ 
 class ThreadTheme extends Component {
     constructor(props) {
         super(props);
@@ -517,7 +746,7 @@ class ThreadTheme extends Component {
         };
         this.initTheme = this.initTheme.bind(this);
         this.likeAction = this.likeAction.bind(this);
-        fetch('/api/topic/'+this.state.tid)
+        fetch(bindURL + '/api/topic/' + this.state.tid)
         .then(function(response) {
             return response.json()
         })
@@ -570,7 +799,7 @@ class ThreadPosts extends Component {
             posts: []
         };
         this.initTheme = this.initTheme.bind(this);
-        fetch('/api/posts/'+this.state.tid)
+        fetch(bindURL + '/api/posts/' + this.state.tid)
         .then(function(response) {
             return response.json()
         })
@@ -615,10 +844,15 @@ class ThreadPost extends Component {
     }
     likeAction(event) {
         var like_count = this.state.is_liked ? this.state.like_count-1 : this.state.like_count+1;
-        this.setState({
-            is_liked: this.state.is_liked ^ 1, 
-            like_count: like_count
-        })
+        if (isLogin()) {
+            this.setState({
+                is_liked: this.state.is_liked ^ 1, 
+                like_count: like_count
+            })
+        } else {
+            console.log('Please login to Continue. [Like]');
+        }
+        
     }
     render() {
         return (
@@ -660,8 +894,8 @@ class PostReplies extends Component {
 };
 
 class PostReply extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             uid: this.props.reply['uid'], 
             username: this.props.reply['username'], 
@@ -676,6 +910,7 @@ class PostReply extends Component {
         
         return (
             <div>
+                {/* To-Do */}
             </div>
         )
     }
@@ -698,10 +933,13 @@ class ThreadReply extends Component {
 };
 
 module.exports = {
+    bindURL: bindURL,
     TopBar: TopBar,
     TopBG: TopBG,
     Forums: Forums, 
     About: About,
     User: User,
-    Thread: Thread
+    Thread: Thread,
+    Account: Account,
+    CreateTopic: CreateTopic,
 }

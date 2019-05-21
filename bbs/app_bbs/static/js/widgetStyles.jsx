@@ -13,6 +13,7 @@ const topBarStyle = css`
         display: flex;
     }
     .right {
+        height: 53px;
         margin-left: auto;
     }
     .ul {
@@ -26,9 +27,9 @@ const topBarStyle = css`
         display: block;
         color: white;
         text-align: center;
-        padding: 5px 16px;
+        padding: 0px 16px;
         text-decoration: none;
-        line-height: 55px;
+        line-height: 53px;
     } 
     .link:hover:not(.active) {
         background-color: rgb(40, 40, 40);
@@ -45,9 +46,12 @@ const topBarStyle = css`
 //#endregion
 //#region panelStyle
 const panelStyle = css`
-    .panel-wrapper {
+    .lr-panel-wrapper {
         left: -235px;
-        margin-top: 65px;
+        margin-top: 53px;
+    }
+    .um-panel-wrapper {
+        margin-top: 53px;
     }
     .lr-panel {
         position: fixed;
@@ -63,6 +67,24 @@ const panelStyle = css`
         font-size: 12px;
         background-color: #333;
         padding: 20px 20px 0;
+    }
+    .um-panel-content {
+        width: 150px;
+        margin-top: 5px;
+        border-radius: 6px;
+        display: flex;
+        flex-direction: column;
+        font-size: 14px;
+        background-color: #222;
+        padding: 20px 5px;
+    }
+    .um-panel-menu {
+        padding: 5px 25px;
+        color: #fff;
+    }
+    .um-panel-menu:hover {
+        background: #111;
+        cursor: pointer;
     }
     .box-controller {
         color: #fff;
@@ -178,8 +200,8 @@ const topBGStyle = css`
     }
 `
 //#endregion
-//#region ThreadEntryStyle
-const ThreadEntryStyle = css`
+//#region threadEntryStyle
+const threadEntryStyle = css`
     .topic_entry {
         margin: 0 40px;
     }
@@ -224,7 +246,7 @@ const ThreadEntryStyle = css`
         text-align: left;
     }
     .c3, .c4 {
-        width: 140px;
+        width: 150px;
         text-align: right;
         color: #58697b;
         font-size: 0.923em;
@@ -271,6 +293,9 @@ const threadThemeStyle = css`
         margin-bottom: 5px;
         display: flex;
         flex-direction: row;
+    }
+    .forum-post-body {
+        width: 100%;
     }
 `
 //#endregion
@@ -397,18 +422,52 @@ const threadPostStyle = css`
     }
 `
 //#endregion
+//#region createTopicStyle
+const createTopicStyle = css`
+    .title-input {
+        background: none;
+        border: none;
+        outline: none;
+        color: #fff;
+        width: 100%;
+        font-weight: 500;
+        font-size: 36px;
+        font-style: italic;
+    }
+    .content-input {
+        min-height: 300px;
+        outline: none;
+        border: none;
+        background: none;
+        resize: vertical;
+        width: 100%;
+        font-size: 13px;
+        font-family: Menlo,Monaco,Consolas,Courier New,monospace;
+    }
+    .edit-bar {
+        background-color: #444;
+        padding: 10px 30px;
+    }
+    .editor-footer {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+`
+//#endregion
 module.exports = {
     topBarStyle: topBarStyle,
     panelStyle: panelStyle,
     panelBoxStyle: panelBoxStyle,
     normalButtonStyle, normalButtonStyle,
     topBGStyle: topBGStyle,
-    ThreadEntryStyle: ThreadEntryStyle,
+    threadEntryStyle: threadEntryStyle,
     forumsStyle: forumsStyle,
     threadThemeStyle: threadThemeStyle,
     likeButtonStyle: likeButtonStyle, 
     posterInfoStyle: posterInfoStyle, 
     postBodyStyle: postBodyStyle,
     threadPostStyle: threadPostStyle, 
-
+    createTopicStyle: createTopicStyle,
 }
