@@ -2,12 +2,13 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {topbarLink, threadLink, createButtonLink} from "./linkStyles.jsx";
 import {avatarLink, usernameLink, userMenuLink} from "./linkStyles.jsx";
+import {postReplyLink, } from "./linkStyles.jsx";
 
 import {topBarStyle, topBGStyle, threadEntryStyle} from "./widgetStyles.jsx"
 import {forumsStyle, threadThemeStyle, likeButtonStyle} from "./widgetStyles.jsx"
 import {posterInfoStyle, postBodyStyle, threadPostStyle} from "./widgetStyles.jsx"
 import {panelStyle, panelBoxStyle, normalButtonStyle} from "./widgetStyles.jsx"
-import {createTopicStyle, } from "./widgetStyles.jsx"
+import {createTopicStyle, postReplyStyle, } from "./widgetStyles.jsx"
 
 var bindURL = "http://119.28.22.85:6712";
 
@@ -207,7 +208,22 @@ class NormalButton extends Component {
     }
     render() {
         return (
-            <div className="nb" onClick={this.props.onClick}>
+            <div className="normal kb" onClick={this.props.onClick}>
+                {this.props.name}
+                <style jsx> {normalButtonStyle} </style>
+            </div>
+            
+        )
+    }
+};
+
+class SmallButton extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return (
+            <div className="small kb" onClick={this.props.onClick}>
                 {this.props.name}
                 <style jsx> {normalButtonStyle} </style>
             </div>
@@ -752,7 +768,7 @@ class ThreadPost extends Component {
                     <PosterInfo uid={this.state.uid} username={this.state.username} reg_time={this.state.reg_time} avatar={this.state.avatar} lvl="lvl1"/>
                     <div className="forum-post-body">
                         <PostBody is_liked={this.state.is_liked} like_count={this.state.like_count} post_time={this.state.post_time} content={this.state.content} likeAction={this.likeAction}/>
-                        <PostReplies reply={this.state.reply} />
+                        <PostReplies tid={this.state.tid} rid={this.state.rid} reply={this.state.reply} />
                     </div>
                 </div>
                 <style jsx>{threadPostStyle}</style>
@@ -925,10 +941,47 @@ class PostReplies extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            replies: this.props.reply
+            replies: this.props.reply,
+            panel: false,
+            rcontent: '',
+            rid: this.props.rid,
+            tid: this.props.tid,
         };
+        this.showReplyPanel = this.showReplyPanel.bind(this);
+        this.postReplyReply = this.postReplyReply.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
-
+    showReplyPanel() {
+        this.setState({panel: this.state.panel ^ 1})
+    }
+    postReplyReply() {
+        if(this.state.rcontent.length != 0) {
+            fetch(bindURL+'/api/posts/'+this.state.tid+'/'+this.state.rid, {
+                method: 'POST',
+                credentials: 'include',
+                body: JSON.stringify({
+                    'content': this.state.rcontent,
+                })
+            })
+            .then(function(response) {
+                if(response.status == 200) {
+                    console.log("Post success.");
+                    location.replace(location.href);
+                } else {
+                    console.log("Post failed.");
+                }
+            }).catch(function(ex) {
+                console.log('Thread reply error.', ex)
+            })
+        } else {
+            console.log("Empty rcontent.");
+        }
+    }
+    handleChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    }
     render() {
         var replyList = [];
         for (var i = 0; i < this.state.replies.length; i++){
@@ -937,8 +990,30 @@ class PostReplies extends Component {
             );
         }
         return (
-            <div>
-                {replyList}
+            <div className='reply-wrapper'>
+                <div className='reply-menu'>
+                    {replyList}
+                    <div className='reply-footer'>
+                        <SmallButton name='Reply' onClick={this.showReplyPanel}/>
+                    </div>
+                    {
+                        this.state.panel
+                        ?
+                            <div className='reply-reply'>
+                                <textarea 
+                                    name="rcontent"
+                                    placeholder="Type post content here"
+                                    className='rcontent-input'
+                                    onChange={this.handleChange}/>
+                                <div className='reply-footer'>
+                                    <SmallButton name='Post' onClick={this.postReplyReply}/>
+                                </div>
+                            </div>
+                        :
+                            <div></div>
+                    }
+                </div>
+                <style jsx>{postReplyStyle}</style>
             </div>
         )
     }
@@ -948,6 +1023,7 @@ class PostReply extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            rrid: this.props.reply['rrid'],
             uid: this.props.reply['uid'], 
             username: this.props.reply['username'], 
             post_time: this.props.reply['post_time'], 
@@ -956,12 +1032,24 @@ class PostReply extends Component {
             is_liked: this.props.reply['is_liked'], 
         };
     }
-
     render() {
-        
         return (
-            <div>
-                {/* To-Do */}
+            <div className='reply-singleline'>
+                <div className='reply-linebody'>
+                    <Link to={"/users/" + this.state.uid} className={`responder ${postReplyLink.className}`}>
+                        {this.state.username + ': '}
+                    </Link>
+                    <div className='reply-content'>
+                        {this.state.content}
+                    </div>
+                </div>
+                <div className='time-wrapper'>
+                    <div className='reply-time'>
+                        {this.state.post_time}
+                    </div>
+                </div>
+                <style jsx>{postReplyLink}</style>
+                <style jsx>{postReplyStyle}</style>
             </div>
         )
     }

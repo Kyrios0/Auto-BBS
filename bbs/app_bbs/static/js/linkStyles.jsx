@@ -139,11 +139,20 @@ const userMenuLink = resolveScopeStyles(
     </div>
 )
 
+const postReplyLink = resolveScopeStyles(
+    <div>
+        <style jsx>{`
+            
+        `}</style>
+    </div>
+)
+
 module.exports = {
     topbarLink: topbarLink,
     threadLink: threadLink,
-    createButtonLink: createButtonLink, 
-    avatarLink: avatarLink, 
+    createButtonLink: createButtonLink,
+    avatarLink: avatarLink,
     usernameLink: usernameLink,
-    userMenuLink: userMenuLink, 
+    userMenuLink: userMenuLink,
+    postReplyLink: postReplyLink,
 }
