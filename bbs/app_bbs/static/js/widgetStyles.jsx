@@ -41,6 +41,10 @@ const topBarStyle = css`
     .link.active:hover {
         background-color: #b87563;
         color: #fff;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
     }
 `
 //#endregion
@@ -94,6 +98,12 @@ const panelStyle = css`
         display: flex;
         justify-content: space-around;
     }
+    .controller:hover {
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+    }
     .selected {
         color: #fc2;
     }
@@ -122,7 +132,7 @@ const panelBoxStyle = css`
 //#endregion
 //#region normalButton
 const normalButtonStyle = css`
-    .nb {
+    .kb {
         border: none;
         display: inline-block;
         background-color: #29b;
@@ -140,17 +150,27 @@ const normalButtonStyle = css`
 
         border-radius: 4px;
         padding: 0 10px;
-        height: 36px;
-        width: 120px;
+
         vertical-align: middle;
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin: 10px 0;
     }
-    .nb:hover {
+    .kb:hover {
         background-position: calc(50% - 20px) 50%;
         text-decoration: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+    }
+    .normal {
+        height: 36px;
+        width: 120px;
+    }
+    .small {
+        height: 24px;
+        width: 80px;
     }
 }
 `
@@ -419,6 +439,9 @@ const threadPostStyle = css`
     }
     .forum-post-body {
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 `
 //#endregion
@@ -454,8 +477,51 @@ const createTopicStyle = css`
         width: 100%;
         flex-wrap: wrap;
     }
+    .reply-wrapper {
+        background-color: #444;
+    }
 `
 //#endregion
+//#region postReplyStyle
+const postReplyStyle = css`
+    .reply-wrapper {
+        padding: 0px 30px 20px;
+    }
+    .reply-menu {
+        padding: 10px 30px 0px;
+        background: #f7f8fa;
+        border: 1px solid #f0f1f2;
+    }
+    .reply-footer {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .rcontent-input {
+        width: 100%;
+        border: 2px solid #d6dffa;
+    }
+    .reply-singleline {
+        display: flex;
+        flex-direction: column;
+        padding-top: 2px;
+    }
+    .reply-linebody {
+        display: flex;
+        flex-direction: row;
+    }
+    .reply-content {
+
+    }
+    .time-wrapper {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .reply-time {
+        color: rgb(153, 153, 153);
+    }
+`
+//#endregion
+
 module.exports = {
     topBarStyle: topBarStyle,
     panelStyle: panelStyle,
@@ -470,4 +536,5 @@ module.exports = {
     postBodyStyle: postBodyStyle,
     threadPostStyle: threadPostStyle, 
     createTopicStyle: createTopicStyle,
+    postReplyStyle: postReplyStyle,
 }

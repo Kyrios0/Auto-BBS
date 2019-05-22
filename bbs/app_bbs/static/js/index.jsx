@@ -19,9 +19,9 @@ class AutoBBS extends Component {
         })
         .then(function(response) {
             if (response.status == 200) {
-                document.cookie = 'isLogin=true';
+                document.cookie = 'isLogin=true;path=/;';
             } else {
-                document.cookie = 'isLogin=false';
+                document.cookie = 'isLogin=false;path=/;';
             }
         })
         .catch(function(ex) {

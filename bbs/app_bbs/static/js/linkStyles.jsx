@@ -29,6 +29,10 @@ const topbarLink = resolveScopeStyles(
             .link.active:hover {
                 background-color: #b87563;
                 color: #fff;
+                cursor: pointer;
+                user-select: none;
+                -webkit-user-select: none;
+                -moz-user-select: none;
             }
         `}</style>
     </div>
@@ -135,11 +139,20 @@ const userMenuLink = resolveScopeStyles(
     </div>
 )
 
+const postReplyLink = resolveScopeStyles(
+    <div>
+        <style jsx>{`
+            
+        `}</style>
+    </div>
+)
+
 module.exports = {
     topbarLink: topbarLink,
     threadLink: threadLink,
-    createButtonLink: createButtonLink, 
-    avatarLink: avatarLink, 
+    createButtonLink: createButtonLink,
+    avatarLink: avatarLink,
     usernameLink: usernameLink,
-    userMenuLink: userMenuLink, 
+    userMenuLink: userMenuLink,
+    postReplyLink: postReplyLink,
 }
