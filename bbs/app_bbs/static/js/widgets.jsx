@@ -259,6 +259,8 @@ class LoginBox extends Component {
                 } else {
                     console.log('Login Failed.')
                 }
+            }).catch(function(ex) {
+                console.log('Login error.', ex)
             })
         }
     }
@@ -613,12 +615,35 @@ class ThreadTheme extends Component {
             is_liked: json['is_liked']
         })
     }
-    likeAction(event) {
+    likeAction() {
         var like_count = this.state.is_liked ? this.state.like_count-1 : this.state.like_count+1;
-        this.setState({
-            is_liked: this.state.is_liked ^ 1, 
-            like_count: like_count
-        })
+        var method = '';
+        if (isLogin()) {
+            if(this.state.is_liked) {
+                method = 'DELETE';
+            } else {
+                method = 'POST';
+            }
+            fetch(bindURL + '/api/agree/' + this.state.tid, {
+                method: method,
+                credentials: 'include',
+            })
+            .then(function(response) {
+                if(response.status == 200) {
+                    console.log('Like: ' +method+' success.');
+                } else {
+                    console.log('Like: ' +method+' failed.');
+                }
+            }).catch(function(ex) {
+                console.log('Like error.', ex)
+            })
+            this.setState({
+                is_liked: this.state.is_liked ^ 1, 
+                like_count: like_count
+            })
+        } else {
+            console.log('Please login to Continue. [Like]');
+        }  
     }
     render() {
         return (
@@ -661,7 +686,7 @@ class ThreadPosts extends Component {
         var postList = [];
         for (var i = 0; i < this.state.posts.length; i++){
             postList.push(
-                <ThreadPost post={this.state.posts[i]} id={i} key={'post'+i}/>
+                <ThreadPost post={this.state.posts[i]} tid={this.state.tid} key={'post'+i}/>
             );
         }
         return (
@@ -676,6 +701,7 @@ class ThreadPost extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            tid: this.props.tid,
             rid: this.props.post['rid'], 
             uid: this.props.post['uid'],
             username: this.props.post['username'],
@@ -689,17 +715,35 @@ class ThreadPost extends Component {
         };
         this.likeAction = this.likeAction.bind(this);
     }
-    likeAction(event) {
+    likeAction() {
         var like_count = this.state.is_liked ? this.state.like_count-1 : this.state.like_count+1;
+        var method = '';
         if (isLogin()) {
+            if(this.state.is_liked) {
+                method = 'DELETE';
+            } else {
+                method = 'POST';
+            }
+            fetch(bindURL+'/api/agree/'+this.state.tid+'/'+this.state.rid, {
+                method: method,
+                credentials: 'include',
+            })
+            .then(function(response) {
+                if(response.status == 200) {
+                    console.log('Like: ' +method+' success.');
+                } else {
+                    console.log('Like: ' +method+' failed.');
+                }
+            }).catch(function(ex) {
+                console.log('Like error.', ex)
+            })
             this.setState({
                 is_liked: this.state.is_liked ^ 1, 
                 like_count: like_count
             })
         } else {
             console.log('Please login to Continue. [Like]');
-        }
-        
+        }  
     }
     render() {
         return (
@@ -756,8 +800,27 @@ class ThreadReply extends Component {
         });
     }
     postReply() {
-
-        console.log("Post success.");
+        if (this.state.content.length != 0) {
+            fetch(bindURL + '/api/posts/' + this.state.tid, {
+                method: 'POST',
+                credentials: 'include',
+                body: JSON.stringify({
+                    'content': this.state.content,
+                })
+            })
+            .then(function(response) {
+                if(response.status == 200) {
+                    console.log("Post success.");
+                    location.replace(location.href);
+                } else {
+                    console.log("Post failed.");
+                }
+            }).catch(function(ex) {
+                console.log('Thread reply error.', ex)
+            })
+        } else {
+            console.log("Empty content.")
+        }
     }
     render() {
         var contentInput = (
@@ -966,9 +1029,22 @@ class CreateTopic extends Component {
     }
     postTopic() {
         fetch(bindURL + '/api/topic', {
+            method: 'POST',
             credentials: 'include',
+            body: JSON.stringify({
+                'topic_name': this.state.topic_name,
+                'content': this.state.content,
+            })
         })
-        .then()
+        .then(function(response) {
+            if(response.status == 200) {
+                console.log('Create topic success.');
+            } else {
+                console.log('Create topic failed.');
+            }
+        }).catch(function(ex) {
+            console.log('Create topic error.', ex)
+        })
     }
     render() {
         var titleInput = (
