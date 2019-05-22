@@ -19,6 +19,10 @@ function isLogin() {
     return getCookieItem('isLogin') == 'true';
 }
 
+function isAdmin() {
+    return getCookieItem('isAdmin') == 'true';
+}
+
 class TopBar extends Component {
     constructor(props) {
         super(props);
@@ -111,6 +115,11 @@ class UserMenuPanel extends Component {
         this.state = {
             uid: this.props.user['uid']
         };
+        this.logout = this.logout.bind(this);
+    }
+    logout() {
+        {/* To-Do */}
+        console.log("Logout.");
     }
     render() {
         return (
@@ -425,11 +434,17 @@ class Forums extends Component {
             <div className="mod_wrap">
                 <TopBG title=""/>
                 <div className="forumbox">
-                    <div className="forum_spacer">
-                        <Link to={"/topic/create"} className={`link ${createButtonLink.className}`}>
-                            <span className="btn_content">Post New</span>
-                        </Link>
-                    </div>
+                    {
+                        isLogin()
+                        ?
+                            <div className="forum_spacer">
+                                <Link to={"/topic/create"} className={`link ${createButtonLink.className}`}>
+                                    <span className="btn_content">Post New</span>
+                                </Link>
+                            </div>
+                        :
+                            <div></div>
+                    }  
                     { topicList }
                 </div>
                 {createButtonLink.styles}
@@ -560,174 +575,6 @@ class Thread extends Component {
     }
 };
 
-class LikeButton extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        };
-    }
-
-    render() {
-        return (
-            <div>
-                <a className={(this.props.is_liked?"is-liked":"like")+' '+"like-button"} onClick={this.props.likeAction}>
-                    <span className="svg-wrapper">
-                        <svg className="like-svg" fill="currentColor" width="16" height="16" viewBox="0 0 24 24">
-                            <path d="M14.445 9h5.387s2.997.154 1.95 3.669c-.168.51-2.346 6.911-2.346 6.911s-.763 1.416-2.86 1.416H8.989c-1.498 0-2.005-.896-1.989-2v-7.998c0-.987.336-2.032 1.114-2.639 4.45-3.773 3.436-4.597 4.45-5.83.985-1.13 3.2-.5 3.037 2.362C15.201 7.397 14.445 9 14.445 9zM3 9h2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V10a1 1 0 0 1 1-1z"></path>
-                        </svg>
-                    </span>
-                    {this.props.like_count}
-                </a>
-                <style jsx>{likeButtonStyle}</style>
-            </div>
-        )
-    }
-};
-
-class CreateTopic extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            topic_name: "",
-            content: "",
-            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
-            uid: "",
-            nickname: "",
-            reg_time: "",
-        };
-        this.initUserInfo = this.initUserInfo.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        fetch(bindURL + '/users')
-        .then(function(response) {
-            return response.json()
-        })
-        .then(this.initUserInfo).catch(function(ex) {
-            console.log('Init user info failed', ex)
-        })
-    }
-    initUserInfo(json) {
-        this.setState({
-            uid: json['uid'],
-            nickname: json['nickname'],
-            reg_time: json['reg_time'], 
-        })
-    }
-    handleChange(event) {
-        this.setState({
-            [event.target.name]: event.target.value
-        });
-    }
-    render() {
-        var titleInput = (
-            <React.Fragment>
-                <input 
-                    name="topic_name"
-                    placeholder="Click here to set title"
-                    maxLength="100"
-                    className='title-input'
-                    onChange={this.handleChange}/>
-                <style jsx>{createTopicStyle}</style>
-            </React.Fragment>
-            
-        );
-        var contentInput = (
-            <React.Fragment>
-                <textarea 
-                    name="content"
-                    placeholder="Type post content here"
-                    className='content-input'
-                    onChange={this.handleChange}/>
-                <style jsx>{createTopicStyle}</style>
-            </React.Fragment>
-        );
-        return (
-            <div>
-                <TopBG title={titleInput} />
-                <div className="thread-theme">
-                    <div className="forum-post">
-                        <PosterInfo uid={this.state.uid} username={this.state.nickname} reg_time={this.state.reg_time} avatar={this.state.avatar} lvl="lvl1"/>
-                        <div className="forum-post-body">
-                            <div className="content-wrapper">
-                                <div className="content">
-                                    {contentInput}
-                                </div>
-                            </div>
-                            <div className="edit-bar">
-                                <div className="editor-footer">
-                                    <NormalButton name="Post"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <style jsx>{createTopicStyle}</style>
-                    <style jsx>{postBodyStyle}</style>
-                    <style jsx>{threadThemeStyle}</style>
-                </div>
-            </div>
-        )
-    }
-};
-
-class PosterInfo extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        };
-    }
-
-    render() {
-        return (
-            <div className={"info "+this.props.lvl}>
-                <div className="info-main">
-                    <div className="avatar_wrapper">
-                        <Link to={"/users/"+this.props.uid} className={`link ${avatarLink.className}`}>
-                            <img className="avatar" src={this.props.avatar}/>
-                        </Link>
-                    </div>   
-                    <Link to={"/users/"+this.props.uid} className={`link ${usernameLink.className}`}>
-                        {this.props.username}
-                    </Link>
-                </div>
-                <div className="info-extra">
-                    <div className="info-extra-buttom">
-                        {"Register time: "+this.props.reg_time.split('月')[0]+"月"}
-                    </div> 
-                </div>
-                {avatarLink.styles}
-                {usernameLink.styles}
-                <style jsx>{posterInfoStyle}</style>
-            </div>
-        )
-    }
-};
-
-class PostBody extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        };
-    }
-
-    render() {
-        return (
-            <div>
-                <div className="header-wrapper">
-                    <LikeButton is_liked={this.props.is_liked} like_count={this.props.like_count} likeAction={this.props.likeAction}/>
-                    <div className="header">
-                        {this.props.post_time}
-                    </div>
-                </div>
-                <div className="content-wrapper">
-                    <div className="content">
-                        {this.props.content}
-                    </div>
-                </div>
-                <style jsx>{postBodyStyle}</style>
-            </div>
-        )
-    }
-};
- 
 class ThreadTheme extends Component {
     constructor(props) {
         super(props);
@@ -870,6 +717,147 @@ class ThreadPost extends Component {
     }
 };
 
+class ThreadReply extends Component {
+    /* To-Do: rebuild with CreateTopic */
+    constructor(props) {
+        super(props);
+        this.state = {
+            tid: this.props.id,
+            content: "",
+            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+            uid: "",
+            nickname: "",
+            reg_time: "",
+        };
+        this.initUserInfo = this.initUserInfo.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.postReply = this.postReply.bind(this);
+        {/* To-Do: Optimize */}
+        fetch(bindURL + '/api/users', {
+            credentials: 'include',
+        })
+        .then(function(response) {
+            return response.json()
+        })
+        .then(this.initUserInfo).catch(function(ex) {
+            console.log('Init user info failed', ex)
+        })
+    }
+    initUserInfo(json) {
+        this.setState({
+            uid: json['uid'],
+            nickname: json['nickname'],
+            reg_time: json['reg_time'], 
+        })
+    }
+    handleChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    }
+    postReply() {
+
+        console.log("Post success.");
+    }
+    render() {
+        var contentInput = (
+            <React.Fragment>
+                <textarea 
+                    name="content"
+                    placeholder="Type post content here"
+                    className='content-input'
+                    onChange={this.handleChange}/>
+                <style jsx>{createTopicStyle}</style>
+            </React.Fragment>
+        );
+        return (
+            <div className="reply-wrapper">
+                <div className="thread-post">
+                    <div className="forum-post">
+                        <PosterInfo uid={this.state.uid} username={this.state.nickname} reg_time={this.state.reg_time} avatar={this.state.avatar} lvl="lvl1"/>
+                        <div className="forum-post-body">
+                            <div className="content-wrapper">
+                                <div className="content">
+                                    {contentInput}
+                                </div>
+                            </div>
+                            <div className="edit-bar">
+                                <div className="editor-footer">
+                                    <NormalButton name="Post" onClick={this.postReply}/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <style jsx>{createTopicStyle}</style>
+                <style jsx>{threadPostStyle}</style>
+                <style jsx>{postBodyStyle}</style>
+                <style jsx>{threadThemeStyle}</style>
+            </div>
+        )
+    }
+};
+
+class PosterInfo extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        };
+    }
+
+    render() {
+        return (
+            <div className={"info "+this.props.lvl}>
+                <div className="info-main">
+                    <div className="avatar_wrapper">
+                        <Link to={"/users/"+this.props.uid} className={`link ${avatarLink.className}`}>
+                            <img className="avatar" src={this.props.avatar}/>
+                        </Link>
+                    </div>   
+                    <Link to={"/users/"+this.props.uid} className={`link ${usernameLink.className}`}>
+                        {this.props.username}
+                    </Link>
+                </div>
+                <div className="info-extra">
+                    <div className="info-extra-buttom">
+                        {"Joined from: "+this.props.reg_time.split('月')[0]+"月"}
+                    </div> 
+                </div>
+                {avatarLink.styles}
+                {usernameLink.styles}
+                <style jsx>{posterInfoStyle}</style>
+            </div>
+        )
+    }
+};
+
+class PostBody extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        };
+    }
+
+    render() {
+        return (
+            <div>
+                <div className="header-wrapper">
+                    <LikeButton is_liked={this.props.is_liked} like_count={this.props.like_count} likeAction={this.props.likeAction}/>
+                    <div className="header">
+                        {this.props.post_time}
+                    </div>
+                </div>
+                <div className="content-wrapper">
+                    <div className="content">
+                        {this.props.content}
+                    </div>
+                </div>
+                <style jsx>{postBodyStyle}</style>
+            </div>
+        )
+    }
+};
+
 class PostReplies extends Component {
     constructor(props) {
         super(props);
@@ -916,17 +904,118 @@ class PostReply extends Component {
     }
 };
 
-class ThreadReply extends Component {
+class LikeButton extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tid: this.props.id
         };
     }
 
     render() {
         return (
             <div>
+                <a className={(this.props.is_liked?"is-liked":"like")+' '+"like-button"} onClick={this.props.likeAction}>
+                    <span className="svg-wrapper">
+                        <svg className="like-svg" fill="currentColor" width="16" height="16" viewBox="0 0 24 24">
+                            <path d="M14.445 9h5.387s2.997.154 1.95 3.669c-.168.51-2.346 6.911-2.346 6.911s-.763 1.416-2.86 1.416H8.989c-1.498 0-2.005-.896-1.989-2v-7.998c0-.987.336-2.032 1.114-2.639 4.45-3.773 3.436-4.597 4.45-5.83.985-1.13 3.2-.5 3.037 2.362C15.201 7.397 14.445 9 14.445 9zM3 9h2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V10a1 1 0 0 1 1-1z"></path>
+                        </svg>
+                    </span>
+                    {this.props.like_count}
+                </a>
+                <style jsx>{likeButtonStyle}</style>
+            </div>
+        )
+    }
+};
+
+class CreateTopic extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            topic_name: "",
+            content: "",
+            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+            uid: "",
+            nickname: "",
+            reg_time: "",
+        };
+        this.initUserInfo = this.initUserInfo.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.postTopic = this.postTopic.bind(this);
+        fetch(bindURL + '/api/users', {
+            credentials: 'include',
+        })
+        .then(function(response) {
+            return response.json()
+        })
+        .then(this.initUserInfo).catch(function(ex) {
+            console.log('Init user info failed', ex)
+        })
+    }
+    initUserInfo(json) {
+        this.setState({
+            uid: json['uid'],
+            nickname: json['nickname'],
+            reg_time: json['reg_time'], 
+        })
+    }
+    handleChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    }
+    postTopic() {
+        fetch(bindURL + '/api/topic', {
+            credentials: 'include',
+        })
+        .then()
+    }
+    render() {
+        var titleInput = (
+            <React.Fragment>
+                <input 
+                    name="topic_name"
+                    placeholder="Click here to set title"
+                    maxLength="100"
+                    className='title-input'
+                    onChange={this.handleChange}/>
+                <style jsx>{createTopicStyle}</style>
+            </React.Fragment>
+            
+        );
+        var contentInput = (
+            <React.Fragment>
+                <textarea 
+                    name="content"
+                    placeholder="Type post content here"
+                    className='content-input'
+                    onChange={this.handleChange}/>
+                <style jsx>{createTopicStyle}</style>
+            </React.Fragment>
+        );
+        return (
+            <div>
+                <TopBG title={titleInput} />
+                <div className="thread-theme">
+                    <div className="forum-post">
+                        <PosterInfo uid={this.state.uid} username={this.state.nickname} reg_time={this.state.reg_time} avatar={this.state.avatar} lvl="lvl1"/>
+                        <div className="forum-post-body">
+                            <div className="content-wrapper">
+                                <div className="content">
+                                    {contentInput}
+                                </div>
+                            </div>
+                            <div className="edit-bar">
+                                <div className="editor-footer">
+                                    <NormalButton name="Post" onClick={this.postTopic}/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <style jsx>{createTopicStyle}</style>
+                    <style jsx>{postBodyStyle}</style>
+                    <style jsx>{threadThemeStyle}</style>
+                </div>
             </div>
         )
     }

@@ -29,6 +29,10 @@ const topbarLink = resolveScopeStyles(
             .link.active:hover {
                 background-color: #b87563;
                 color: #fff;
+                cursor: pointer;
+                user-select: none;
+                -webkit-user-select: none;
+                -moz-user-select: none;
             }
         `}</style>
     </div>

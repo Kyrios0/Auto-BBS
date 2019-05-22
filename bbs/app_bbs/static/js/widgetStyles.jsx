@@ -41,6 +41,10 @@ const topBarStyle = css`
     .link.active:hover {
         background-color: #b87563;
         color: #fff;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
     }
 `
 //#endregion
@@ -93,6 +97,12 @@ const panelStyle = css`
         margin-bottom: 20px;
         display: flex;
         justify-content: space-around;
+    }
+    .controller:hover {
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
     }
     .selected {
         color: #fc2;
@@ -453,6 +463,9 @@ const createTopicStyle = css`
         justify-content: flex-end;
         width: 100%;
         flex-wrap: wrap;
+    }
+    .reply-wrapper {
+        background-color: #444;
     }
 `
 //#endregion
