@@ -119,8 +119,20 @@ class UserMenuPanel extends Component {
         this.logout = this.logout.bind(this);
     }
     logout() {
-        {/* To-Do */}
-        console.log("Logout.");
+        fetch(bindURL + '/api/login', {
+            method: "DELETE",
+            credentials: 'include',
+        })
+        .then(function(response) {
+            if(response.status == 200) {
+                console.log("Logout success.");
+                document.cookie = 'isLogin=false;path=/;';
+            } else {
+                console.log("Logout failed.");
+            }
+        }).catch(function(ex) {
+            console.log('Logout error.', ex)
+        })
     }
     render() {
         return (
