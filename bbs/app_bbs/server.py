@@ -14,5 +14,9 @@ api.add_resource(Login_api, '/api/login')
 api.add_resource(User_api, '/api/users', '/api/users/<int:uid>')
 api.add_resource(Posts_api, '/api/posts/<int:tid>', '/api/posts/<int:tid>/<int:rid>')
 
+@app.route('/<path:path>')
+def all(path):
+    return render_template('dev.html')
+
 if __name__ == '__main__':
     app.run()
