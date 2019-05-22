@@ -15,6 +15,10 @@ api = Api(app)
 def index():
     return render_template('dev.html')
 
+@app.route('/<path:path>')
+def all(path):
+    return render_template('dev.html')
+
 topic_list = [
     {
         "tid" : 1, 
