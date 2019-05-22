@@ -127,6 +127,8 @@ class UserMenuPanel extends Component {
             if(response.status == 200) {
                 console.log("Logout success.");
                 document.cookie = 'isLogin=false;path=/;';
+                location.replace(location.href);
+
             } else {
                 console.log("Logout failed.");
             }
@@ -283,6 +285,7 @@ class LoginBox extends Component {
             .then(function(response) {
                 if (response.status == 200) {
                     console.log("Login Success.")
+                    document.cookie = 'isLogin=true;path=/;';
                     location.replace(location.href);
                 } else {
                     console.log('Login Failed.')
@@ -443,6 +446,7 @@ class Forums extends Component {
             credentials: 'include',
         })
         .then(function(response) {
+            
             return response.json()
         })
         .then(this.initTopic)
@@ -450,8 +454,9 @@ class Forums extends Component {
             console.log('Init topic failed', ex)
         })
     }
+
     initTopic(json) {
-		this.setState({topics: json});
+        this.setState({topics: json});
 	}
     render() {
         var topicList = [];
@@ -839,7 +844,7 @@ class ThreadReply extends Component {
             .then(function(response) {
                 if(response.status == 200) {
                     console.log("Post success.");
-                    location.replace(location.href);
+                    {/*location.replace(location.href);*/}
                 } else {
                     console.log("Post failed.");
                 }
@@ -1060,7 +1065,7 @@ class PostReply extends Component {
                         {this.state.post_time}
                     </div>
                 </div>
-                <style jsx>{postReplyLink}</style>
+                {postReplyLink.styles}
                 <style jsx>{postReplyStyle}</style>
             </div>
         )

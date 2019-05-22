@@ -142,7 +142,9 @@ const userMenuLink = resolveScopeStyles(
 const postReplyLink = resolveScopeStyles(
     <div>
         <style jsx>{`
-            
+            .responder {
+                
+            }
         `}</style>
     </div>
 )

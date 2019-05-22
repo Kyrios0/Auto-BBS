@@ -12,7 +12,6 @@ class AutoBBS extends Component {
     constructor() {
         super();
         this.state = {
-            isLogin: -1,
         };
         fetch(bindURL + '/api/login', {
             credentials: 'include',
