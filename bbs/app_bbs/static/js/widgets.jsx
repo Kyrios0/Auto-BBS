@@ -181,36 +181,6 @@ class Forums extends Component {
     }
 };
 
-class About extends Component {
-    constructor() {
-        super();
-        this.state = {
-        };
-    }
-
-    render() {
-        return (
-            <div>
-            </div>
-        )
-    }
-};
-
-class Account extends Component {
-    constructor() {
-        super();
-        this.state = {
-        };
-    }
-
-    render() {
-        return (
-            <div>
-            </div>
-        )
-    }
-};
-
 class Thread extends Component {
     constructor(props) {
         super(props);
@@ -235,7 +205,7 @@ class ThreadTheme extends Component {
         this.state = {
             tid: this.props.id, 
             topic_name: "",
-            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+            avatar: "/static/img/Blood.png", 
             uid: "",
             username: "",
             content: "",
@@ -248,7 +218,9 @@ class ThreadTheme extends Component {
         this.initTheme = this.initTheme.bind(this);
         this.likeTheme = this.likeTheme.bind(this);
         this.deleteTheme = this.deleteTheme.bind(this);
-        fetch(bindURL + '/api/topic/' + this.state.tid)
+        fetch(bindURL + '/api/topic/' + this.state.tid, {
+            credentials: 'include',
+        })
         .then(function(response) {
             return response.json()
         })
@@ -339,7 +311,9 @@ class ThreadPosts extends Component {
             posts: []
         };
         this.initTheme = this.initTheme.bind(this);
-        fetch(bindURL + '/api/posts/' + this.state.tid)
+        fetch(bindURL + '/api/posts/' + this.state.tid, {
+            credentials: 'include',
+        })
         .then(function(response) {
             return response.json()
         })
@@ -379,7 +353,7 @@ class ThreadPost extends Component {
             like_count: this.props.post['like_count'],
             is_liked: this.props.post['is_liked'],
             reply: this.props.post['reply'],
-            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+            avatar: "/static/img/Blood.png", 
             is_admin: 0,
         };
         this.likePost = this.likePost.bind(this);
@@ -453,7 +427,7 @@ class ThreadReply extends Component {
         this.state = {
             tid: this.props.id,
             content: "",
-            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+            avatar: "/static/img/Blood.png", 
             uid: "",
             nickname: "",
             reg_time: "",
@@ -488,6 +462,9 @@ class ThreadReply extends Component {
         if (this.state.content.length != 0) {
             fetch(bindURL + '/api/posts/' + this.state.tid, {
                 method: 'POST',
+                headers: new Headers({
+                    'content-type': 'application/json',
+                }),
                 credentials: 'include',
                 body: JSON.stringify({
                     'content': this.state.content,
@@ -641,6 +618,9 @@ class PostReplies extends Component {
         if(this.state.rcontent.length != 0) {
             fetch(bindURL+'/api/posts/'+this.state.tid+'/'+this.state.rid, {
                 method: 'POST',
+                headers: new Headers({
+                    'content-type': 'application/json',
+                }),
                 credentials: 'include',
                 body: JSON.stringify({
                     'content': this.state.rcontent,
@@ -804,7 +784,7 @@ class CreateTopic extends Component {
         this.state = {
             topic_name: "",
             content: "",
-            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+            avatar: "/static/img/Blood.png", 
             uid: "",
             nickname: "",
             reg_time: "",
@@ -837,6 +817,9 @@ class CreateTopic extends Component {
     postTopic() {
         fetch(bindURL + '/api/topic', {
             method: 'POST',
+            headers: new Headers({
+                'content-type': 'application/json',
+            }),
             credentials: 'include',
             body: JSON.stringify({
                 'topic_name': this.state.topic_name,
@@ -905,11 +888,11 @@ class CreateTopic extends Component {
 };
 
 module.exports = {
-    bindURL: bindURL,
+    NormalButton: NormalButton,
+    SmallButton: SmallButton,
     TopBG: TopBG,
     Forums: Forums, 
-    About: About,
     Thread: Thread,
-    Account: Account,
+    LikeButton: LikeButton,
     CreateTopic: CreateTopic,
 }

@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import {Account, About} from "./widgets.jsx"
+
 import {Forums, CreateTopic, Thread} from "./widgets.jsx"
+import {About} from "./about.jsx"
+import {Account} from "./account.jsx"
 import {TopBar} from "./topbar.jsx"
 import {User} from "./user.jsx"
 import {bindURL} from "./basic.jsx"

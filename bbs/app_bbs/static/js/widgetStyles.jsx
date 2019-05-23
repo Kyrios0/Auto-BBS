@@ -5,7 +5,7 @@ const normalButtonStyle = css`
         border: none;
         display: inline-block;
         background-color: #29b;
-        background-image: url("https://osu.ppy.sh/images/backgrounds/buttonblue@2x.png");
+        background-image: url("/static/img/buttonblue@2x.png");
         background-size: cover;
         background-position: 50% 50%;
         transition: background-position .12s;
@@ -56,7 +56,7 @@ const topBGStyle = css`
         overflow: hidden;
         display: flex;
         align-items: flex-end;
-        background: rgba(0, 0, 0, 0) url("https://blog.kyrios.cn/wp-content/uploads/2019/04/bbs_head2.jpg") repeat scroll left bottom;
+        background: rgba(0, 0, 0, 0) url("/static/img/bbs_head2.jpg") repeat scroll left bottom;
     }
     .head_bg::before {
         position: absolute;
@@ -75,7 +75,7 @@ const topBGStyle = css`
         margin: 20px 70px;
         width: 237px;
         height: 100px;
-        background: rgba(0, 0, 0, 0) url("https://blog.kyrios.cn/wp-content/uploads/2019/03/logow_100px.png") repeat scroll 0% 0%;
+        background: rgba(0, 0, 0, 0) url("/static/img/logow_100px.png") repeat scroll 0% 0%;
     }
     .title-text {
         padding: 10px 0 10px 20px;
@@ -133,7 +133,7 @@ const threadEntryStyle = css`
         align-self: center
         font-size: 16px;
         background-color: #777;
-        background-image: url(https://osu.ppy.sh/images/backgrounds/button.svg);
+        background-image: url(/static/img/button.svg);
         background-size: 50px;
         background-position: 50%;
         color: #fff;
@@ -255,7 +255,7 @@ const posterInfoStyle = css`
         left: 0;
         height: 100%;
         width: 100%;
-        background-image: url(https://osu.ppy.sh/images/backgrounds/button.svg);
+        background-image: url(/static/img/button.svg);
         background-size: 300px;
         opacity: .5;
     }
