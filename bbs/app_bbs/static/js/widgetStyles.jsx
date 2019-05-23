@@ -1,135 +1,4 @@
 import css from 'styled-jsx/css'
-//#region topBarStyle
-const topBarStyle = css`
-    #mainmenu {
-        overflow: hidden;
-        background-color: rgb(34, 34, 34);
-    }
-    .nav {
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-    .left {
-        display: flex;
-    }
-    .right {
-        height: 53px;
-        margin-left: auto;
-    }
-    .ul {
-        background-color: rgb(34, 34, 34);
-    }
-    .li {
-        float: left;
-        font-size: 1.085em;
-    }
-    .link {
-        display: block;
-        color: white;
-        text-align: center;
-        padding: 0px 16px;
-        text-decoration: none;
-        line-height: 53px;
-    } 
-    .link:hover:not(.active) {
-        background-color: rgb(40, 40, 40);
-    }
-    .link.active {
-        background-color: #591804;
-        color: #fff;
-    }
-    .link.active:hover {
-        background-color: #b87563;
-        color: #fff;
-        cursor: pointer;
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-    }
-`
-//#endregion
-//#region panelStyle
-const panelStyle = css`
-    .lr-panel-wrapper {
-        left: -235px;
-        margin-top: 53px;
-    }
-    .um-panel-wrapper {
-        margin-top: 53px;
-    }
-    .lr-panel {
-        position: fixed;
-        z-index: 999;
-        margin-top: 5px;
-    }
-    .lr-panel-content {
-        width: 300px;
-        margin-top: 5px;
-        border-radius: 4px;
-        display: flex;
-        flex-direction: column;
-        font-size: 12px;
-        background-color: #333;
-        padding: 20px 20px 0;
-    }
-    .um-panel-content {
-        width: 150px;
-        margin-top: 5px;
-        border-radius: 6px;
-        display: flex;
-        flex-direction: column;
-        font-size: 14px;
-        background-color: #222;
-        padding: 20px 5px;
-    }
-    .um-panel-menu {
-        padding: 5px 25px;
-        color: #fff;
-    }
-    .um-panel-menu:hover {
-        background: #111;
-        cursor: pointer;
-    }
-    .box-controller {
-        color: #fff;
-        font-size: 15px;
-        font-style: normal;
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: space-around;
-    }
-    .controller:hover {
-        cursor: pointer;
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-    }
-    .selected {
-        color: #fc2;
-    }
-`
-//#endregion
-//#region panelBoxStyle
-const panelBoxStyle = css`
-    .panel-box {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 5px;
-    }
-    input {
-        border-radius: 4px;
-        border: none;
-        background-color: #222;
-        padding: 10px 5px;
-        margin-bottom: 5px;
-        color: #999;
-    }
-    .panel-box-buttom {
-        display: flex;
-        justify-content: flex-end;
-    }
-`
-//#endregion
 //#region normalButton
 const normalButtonStyle = css`
     .kb {
@@ -155,7 +24,7 @@ const normalButtonStyle = css`
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 10px 0;
+        margin: 10px 0px;
     }
     .kb:hover {
         background-position: calc(50% - 20px) 50%;
@@ -171,6 +40,9 @@ const normalButtonStyle = css`
     .small {
         height: 24px;
         width: 80px;
+    }
+    .margin-10 {
+        margin: 10px 10px;
     }
 }
 `
@@ -254,6 +126,18 @@ const threadEntryStyle = css`
         line-height: 1.83em;
         flex: none;
     }
+    .topic_entry_col {
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        align-self: center
+        font-size: 16px;
+        background-color: #777;
+        background-image: url(https://osu.ppy.sh/images/backgrounds/button.svg);
+        background-size: 50px;
+        background-position: 50%;
+        color: #fff;
+    }
     .c1 {
         width: 50px;
         text-align: center;
@@ -276,7 +160,7 @@ const threadEntryStyle = css`
 //#region forumsStyle
 const forumsStyle = css`
     .mod_wrap {
-        text-align: center;
+        
         margin: 0px 10px 8px 10px;
     }
     .forumbox {
@@ -293,9 +177,20 @@ const forumsStyle = css`
         display: flex;
         align-items: center;
         margin: 30px 40px;
+        justify-content: space-between;
+    }
+    .forum-topics-title {
+        color: #262626;
+        font-size: 16px;
+        margin: 30px 0 0;
+        padding: 0 40px 5px;
+        font-style: italic;
     }
     .btn_content {
         margin: 0 5px;
+    }
+    .thread-order {
+        display: flex;
     }
 `
 //#endregion
@@ -374,6 +269,9 @@ const posterInfoStyle = css`
     }
     .lvl1 {
         background-color: #29b;
+    }
+    .lvl2 {
+        background-color: #3366FF;
     }
     .avatar_wrapper {
         background-size: 153px 83px;
@@ -537,9 +435,6 @@ const postReplyStyle = css`
 //#endregion
 
 module.exports = {
-    topBarStyle: topBarStyle,
-    panelStyle: panelStyle,
-    panelBoxStyle: panelBoxStyle,
     normalButtonStyle, normalButtonStyle,
     topBGStyle: topBGStyle,
     threadEntryStyle: threadEntryStyle,

@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import {TopBar, Account, About} from "./widgets.jsx"
-import {Forums, User, Thread} from "./widgets.jsx"
-import {CreateTopic} from "./widgets.jsx"
-import {bindURL} from "./widgets.jsx"
+import {Account, About} from "./widgets.jsx"
+import {Forums, CreateTopic, Thread} from "./widgets.jsx"
+import {TopBar} from "./topbar.jsx"
+import {User} from "./user.jsx"
+import {bindURL} from "./basic.jsx"
 
 var destination = document.querySelector("#container");
 
@@ -54,7 +55,7 @@ class AutoBBS extends Component {
                     <Switch>
                         <Route exact path="/" component={Forums} />
                         <Route path="/about" component={About} />
-                        <Route path="/user/:id" component={User} />
+                        <Route path="/users/:id" component={User} />
                         <Route path="/thread/:id" component={Thread} />
                         <Route path="/account" component={Account} />
                         <Route path="/topic/create" component={CreateTopic} />
