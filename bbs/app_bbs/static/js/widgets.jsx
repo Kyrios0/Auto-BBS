@@ -181,36 +181,6 @@ class Forums extends Component {
     }
 };
 
-class About extends Component {
-    constructor() {
-        super();
-        this.state = {
-        };
-    }
-
-    render() {
-        return (
-            <div>
-            </div>
-        )
-    }
-};
-
-class Account extends Component {
-    constructor() {
-        super();
-        this.state = {
-        };
-    }
-
-    render() {
-        return (
-            <div>
-            </div>
-        )
-    }
-};
-
 class Thread extends Component {
     constructor(props) {
         super(props);
@@ -922,9 +892,7 @@ module.exports = {
     SmallButton: SmallButton,
     TopBG: TopBG,
     Forums: Forums, 
-    About: About,
     Thread: Thread,
-    Account: Account,
     LikeButton: LikeButton,
     CreateTopic: CreateTopic,
 }
