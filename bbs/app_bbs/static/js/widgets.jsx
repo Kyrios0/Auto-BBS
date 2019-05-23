@@ -1,218 +1,15 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import {topbarLink, threadLink, createButtonLink} from "./linkStyles.jsx";
-import {avatarLink, usernameLink, userMenuLink} from "./linkStyles.jsx";
+import {threadLink, createButtonLink} from "./linkStyles.jsx";
+import {avatarLink, usernameLink} from "./linkStyles.jsx";
 import {postReplyLink, } from "./linkStyles.jsx";
 
-import {topBarStyle, topBGStyle, threadEntryStyle} from "./widgetStyles.jsx"
+import {normalButtonStyle, topBGStyle, threadEntryStyle} from "./widgetStyles.jsx"
 import {forumsStyle, threadThemeStyle, likeButtonStyle} from "./widgetStyles.jsx"
 import {posterInfoStyle, postBodyStyle, threadPostStyle} from "./widgetStyles.jsx"
-import {panelStyle, panelBoxStyle, normalButtonStyle} from "./widgetStyles.jsx"
-import {createTopicStyle, postReplyStyle, } from "./widgetStyles.jsx"
+import {createTopicStyle, postReplyStyle} from "./widgetStyles.jsx"
 
-var bindURL = "http://119.28.22.85:6712";
-
-function getCookieItem(sKey) {
-    return document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + sKey.replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1");
-}
-
-function isLogin() {
-    return getCookieItem('isLogin') == 'true';
-}
-
-function isAdmin() {
-    return getCookieItem('isAdmin') == 'true';
-}
-
-class TopBar extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            panel: false,
-            focusText: 'Login',
-            uid: -1,
-            user: null,
-        };
-        this.initTopbar = this.initTopbar.bind(this);
-        this.showPanel = this.showPanel.bind(this);
-        if (isLogin()) {
-            fetch(bindURL + '/api/users', {
-                credentials: 'include',
-            })
-            .then(function(response) {
-                return response.json();
-            })
-            .then(this.initTopbar)
-            .catch(function(ex) {
-                console.log('Init topbar failed', ex)
-            })
-        }
-    }
-    initTopbar(json) {
-        this.setState({
-            uid: json['uid'],
-            focusText: json['nickname'],
-            user: json
-        })
-    }
-    showPanel() {
-        this.setState({panel: this.state.panel ^ 1})
-    }
-    render() {
-        return (
-            <div>
-                <div id="mainmenu">
-                    <div className="nav">
-                        <div className="left">
-                            <div className="ul">
-                                <div className="li">
-                                    <Link to="/" className={`link ${topbarLink.className}`}>
-                                        <img style={{height: 50+'px'}} src="https://blog.kyrios.cn/wp-content/uploads/2019/04/auto-bbs.png"/>
-                                    </Link>
-                                </div>
-                                <div className="li">
-                                    <Link to="/" className={`link ${topbarLink.className}`}>Home</Link>
-                                </div>
-                                <div className="li">
-                                    <Link to="/about" className={`link ${topbarLink.className}`}>About</Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="right">
-                            <div className="li">
-                                <div
-                                    className="active link"
-                                    onClick={this.showPanel}>
-                                    { this.state.focusText }
-                                </div>
-                            </div>
-                            <div>
-                                {
-                                    isLogin()
-                                    ?
-                                        this.state.user
-                                        ?
-                                            <UserMenuPanel visible={this.state.panel} user={this.state.user}/>
-                                        :
-                                            <div></div>
-                                    :
-                                        <LoginRegisterPanel visible={this.state.panel}/>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                    {topbarLink.styles}
-                    <style jsx>{topBarStyle}</style>
-                </div>
-                
-            </div>
-        )
-    }
-};
-
-class UserMenuPanel extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            uid: this.props.user['uid']
-        };
-        this.logout = this.logout.bind(this);
-    }
-    logout() {
-        fetch(bindURL + '/api/login', {
-            method: "DELETE",
-            credentials: 'include',
-        })
-        .then(function(response) {
-            if(response.status == 200) {
-                console.log("Logout success.");
-                document.cookie = 'isLogin=false;path=/;';
-            } else {
-                console.log("Logout failed.");
-            }
-        }).catch(function(ex) {
-            console.log('Logout error.', ex)
-        })
-    }
-    render() {
-        return (
-            <div className="um-panel-wrapper">
-                { 
-                    this.props.visible
-                    ?
-                        <div className="lr-panel">
-                            <div className="um-panel-content">
-                                <Link to={'/users/'+this.state.uid} className={`menu ${userMenuLink.className}`}>
-                                    Info
-                                </Link>
-                                <Link to={'/account'} className={`menu ${userMenuLink.className}`}>
-                                    Setting
-                                </Link>
-                                <div className='um-panel-menu' onClick={this.logout}>
-                                    Logout
-                                </div>
-                            </div>
-                        </div>
-                    :   
-                        <div></div>
-                }
-                {userMenuLink.styles}
-                <style jsx>{panelStyle}</style>
-            </div>
-        );
-    }
-};
-
-class LoginRegisterPanel extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            loginActive: true,
-        };
-        this.showLoginBox = this.showLoginBox.bind(this)
-        this.showRegisterBox = this.showRegisterBox.bind(this)
-    }
-    showLoginBox() {
-        this.setState({loginActive: true})
-    }
-    showRegisterBox() {
-        this.setState({loginActive: false})
-    }
-    render() {
-        return (
-            <div className="lr-panel-wrapper">
-                { 
-                    this.props.visible
-                    ?
-                        <div className="lr-panel">
-                            <div className="lr-panel-content">
-                                <div className="box-controller">
-                                    <div 
-                                        className={"controller " + (this.state.loginActive
-                                            ? "selected" : "")} 
-                                        onClick={this.showLoginBox}>
-                                        Login
-                                    </div>
-                                    <div
-                                        className={"controller " + (this.state.loginActive 
-                                            ? "" : "selected")}
-                                        onClick={this.showRegisterBox}>
-                                        Register
-                                    </div>
-                                </div>
-                                <div>
-                                    {this.state.loginActive ? <LoginBox/> : <RegisterBox/>}
-                                </div>
-                            </div>
-                        </div>
-                    :   
-                        <div></div>
-                }
-                <style jsx>{panelStyle}</style>
-            </div>
-        );
-    }
-};
+import {bindURL, isLogin, isAdmin, canDelete} from "./basic.jsx"
 
 class NormalButton extends Component {
     constructor(props) {
@@ -220,7 +17,7 @@ class NormalButton extends Component {
     }
     render() {
         return (
-            <div className="normal kb" onClick={this.props.onClick}>
+            <div className={"normal kb " + this.props.c} onClick={this.props.onClick}>
                 {this.props.name}
                 <style jsx> {normalButtonStyle} </style>
             </div>
@@ -240,140 +37,6 @@ class SmallButton extends Component {
                 <style jsx> {normalButtonStyle} </style>
             </div>
             
-        )
-    }
-};
-
-class LoginBox extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: "",
-            password: "",
-        };
-        this.validateForm = this.validateForm.bind(this)
-        this.handleChange = this.handleChange.bind(this)
-        this.login = this.login.bind(this)
-    }
-    validateForm() {
-        return this.state.username.length > 0 && this.state.password.length > 0;
-    }
-    handleChange(event) {
-        this.setState({
-            [event.target.name]: event.target.value
-        });
-    }
-    login(e) {
-        e.preventDefault();
-        {/* WARNING!!: Delete DEBUG line after development plz. */}
-        console.log("[l]: username: %s, password: %s", this.state.username, this.state.password)
-        if(this.validateForm()){
-            fetch(bindURL + "/api/login", {
-                method: 'POST',
-                headers: new Headers({
-                    'content-type': 'application/json',
-                }),
-                credentials: 'include',
-                mode: 'cors',
-                body: JSON.stringify({
-                    'username': this.state.username,
-                    'password': this.state.password
-                })
-            })
-            .then(function(response) {
-                if (response.status == 200) {
-                    console.log("Login Success.")
-                    location.replace(location.href);
-                } else {
-                    console.log('Login Failed.')
-                }
-            }).catch(function(ex) {
-                console.log('Login error.', ex)
-            })
-        }
-    }
-    render() {
-        return (
-            <div className="panel-box">
-                <input 
-                    name="username"
-                    placeholder="Username" 
-                    onChange={this.handleChange}/>
-                <input
-                    name="password"
-                    placeholder="Password"
-                    type="password"
-                    onChange={this.handleChange}/>
-                <div className="panel-box-buttom">
-                    <NormalButton onClick={this.login} name="Login" />
-                </div>
-                <style jsx>{panelBoxStyle}</style>
-            </div>
-        )
-    }
-};
-
-class RegisterBox extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: "",
-            password: "",
-        };
-        this.validateForm = this.validateForm.bind(this)
-        this.handleChange = this.handleChange.bind(this)
-        this.register = this.register.bind(this)
-    }
-    validateForm() {
-        return this.state.username.length > 0 && this.state.password.length > 0;
-    }
-    handleChange(event) {
-        this.setState({
-            [event.target.name]: event.target.value
-        });
-    }
-    register(e) {
-        e.preventDefault();
-        {/* WARNING!!: Delete DEBUG line after development plz. */}
-        console.log("[r]: username: %s, password: %s", this.state.username, this.state.password)
-        if(this.validateForm()){
-            fetch(bindURL + "/api/users", {
-                method: 'POST',
-                headers: new Headers({
-                    'content-type': 'application/json',
-                }),
-                mode: 'cors',
-                body: JSON.stringify({
-                    'username': this.state.username,
-                    'password': this.state.password
-                })
-            })
-            .then(function(response) {
-                if (response.status == 200) {
-                    console.log("Register Success.")
-                } else {
-                    console.log('Register Failed.')
-                }
-            })
-        }
-    }
-    render() {
-        return (
-            <div className="panel-box">
-                <input 
-                    name="username"
-                    placeholder="Username" 
-                    onChange={this.handleChange}/>
-                <input
-                    name="password"
-                    placeholder="Password"
-                    type="password"
-                    onChange={this.handleChange}/>
-                <div className="panel-box-buttom">
-                    <NormalButton onClick={this.register} name="Register" />
-                </div>
-                <style jsx>{panelBoxStyle}</style>
-            </div>
         )
     }
 };
@@ -400,7 +63,9 @@ class ThreadEntry extends Component {
                 <div className="topic_entry">
                     <div className="row">
                         <div className="topic_entry_content c1">
-                            <a className="replies"> { this.props.topic['replies'] } </a>
+                            <div className="topic_entry_col">
+                                
+                            </div>
                         </div>
                         <div className="topic_entry_content c2">
                             <Link to={"/thread/"+this.props.topic['tid']} className={`link topic ${threadLink.className}`}> 
@@ -437,12 +102,14 @@ class Forums extends Component {
         super();
         this.state = {
             topics: [], 
+            category: "Latest",
         };
         this.initTopic = this.initTopic.bind(this);
         fetch(bindURL + '/api/topic', {
             credentials: 'include',
         })
         .then(function(response) {
+            
             return response.json()
         })
         .then(this.initTopic)
@@ -451,8 +118,29 @@ class Forums extends Component {
         })
     }
     initTopic(json) {
-		this.setState({topics: json});
-	}
+        this.setState({topics: json});
+    }
+    refreshTopic(event, category) {
+        var path = '/api/topic';
+        console.log(category);
+        if(category != '') {
+            path = path +  '/' + category;
+            category = category[0].toUpperCase() + category.slice(1);
+        } else {
+            category = "Latest"
+        }
+        this.setState({category: category})
+        fetch(bindURL + path, {
+            credentials: 'include',
+        })
+        .then(function(response) {
+            return response.json()
+        })
+        .then(this.initTopic)
+        .catch(function(ex) {
+            console.log('Refresh topic failed', ex)
+        })
+    }
     render() {
         var topicList = [];
         for (var i = 0; i < this.state.topics.length; i++){
@@ -464,17 +152,26 @@ class Forums extends Component {
             <div className="mod_wrap">
                 <TopBG title=""/>
                 <div className="forumbox">
-                    {
-                        isLogin()
-                        ?
-                            <div className="forum_spacer">
-                                <Link to={"/topic/create"} className={`link ${createButtonLink.className}`}>
-                                    <span className="btn_content">Post New</span>
-                                </Link>
-                            </div>
-                        :
-                            <div></div>
-                    }  
+                    <div className="forum_spacer">
+                        {
+                            isLogin()
+                            ?
+                                <div>
+                                    <Link to={"/topic/create"} className={`link ${createButtonLink.className}`}>
+                                        <span className="btn_content">Post New</span>
+                                    </Link>
+                                </div>
+                            :
+                                <div></div>
+                        }
+                        <div className="thread-order">
+                            <NormalButton name="Order: Latest" onClick={ (e) => this.refreshTopic(e, '')} c="margin-10"/>
+                            <NormalButton name="Order: Hot" onClick={ (e) => this.refreshTopic(e, 'hot')} c="margin-10"/>
+                        </div>
+                    </div>
+                    <h2 className="forum-topics-title">
+                        {this.state.category + ' Topic'}
+                    </h2>
                     { topicList }
                 </div>
                 {createButtonLink.styles}
@@ -500,79 +197,6 @@ class About extends Component {
 };
 
 class Account extends Component {
-    constructor() {
-        super();
-        this.state = {
-        };
-    }
-
-    render() {
-        return (
-            <div>
-            </div>
-        )
-    }
-};
-
-class User extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            uid: this.props.match.params.id, 
-        };
-    }
-    render() {
-        return (
-            <div>
-                {
-                    isLogin()
-                    ?
-                        <div>
-                            <UserInfo/>
-                            <RelateActive/>
-                            <HighLights/>
-                        </div>
-                    :
-                        <div>
-                            'Please Login First.'
-                        </div>
-                }
-            </div>
-        )
-    }
-};
-
-class UserInfo extends Component {
-    constructor() {
-        super();
-        this.state = {
-        };
-    }
-
-    render() {
-        return (
-            <div>
-            </div>
-        )
-    }
-};
-
-class RelateActive extends Component {
-    constructor() {
-        super();
-        this.state = {
-        };
-    }
-
-    render() {
-        return (
-            <div>
-            </div>
-        )
-    }
-};
-
-class HighLights extends Component {
     constructor() {
         super();
         this.state = {
@@ -619,10 +243,11 @@ class ThreadTheme extends Component {
             reg_time: "",
             like_count: 0,
             is_liked: false,
-
+            is_admin: 0,
         };
         this.initTheme = this.initTheme.bind(this);
-        this.likeAction = this.likeAction.bind(this);
+        this.likeTheme = this.likeTheme.bind(this);
+        this.deleteTheme = this.deleteTheme.bind(this);
         fetch(bindURL + '/api/topic/' + this.state.tid)
         .then(function(response) {
             return response.json()
@@ -643,7 +268,7 @@ class ThreadTheme extends Component {
             is_liked: json['is_liked']
         })
     }
-    likeAction() {
+    likeTheme() {
         var like_count = this.state.is_liked ? this.state.like_count-1 : this.state.like_count+1;
         var method = '';
         if (isLogin()) {
@@ -673,15 +298,30 @@ class ThreadTheme extends Component {
             console.log('Please login to Continue. [Like]');
         }  
     }
+    deleteTheme() {
+        console.log('Delete tid '+this.state.tid);
+        fetch(bindURL + '/api/topic/' + this.state.tid, {
+            method: 'DELETE',
+            credentials: 'include',
+        })
+        .then(function(response) {
+            if(response.status == 200) {
+                console.log('Delete success.');
+                location.replace(location.origin);
+            } else {
+                console.log('Delete failed.');
+            }
+        })
+    }
     render() {
         return (
             <div>
                 <TopBG title={this.state.topic_name} />
                 <div className="thread-theme">
                     <div className="forum-post">
-                        <PosterInfo uid={this.state.uid} username={this.state.username} reg_time={this.state.reg_time} avatar={this.state.avatar} lvl="lvl1"/>
+                        <PosterInfo uid={this.state.uid} username={this.state.username} reg_time={this.state.reg_time} avatar={this.state.avatar} lvl={this.state.is_admin?"lvl2":"lvl1"}/>
                         <div className="forum-post-body">
-                            <PostBody is_liked={this.state.is_liked} like_count={this.state.like_count} post_time={this.state.post_time} content={this.state.content} likeAction={this.likeAction}/>
+                            <PostBody uid={this.state.uid} is_liked={this.state.is_liked} like_count={this.state.like_count} post_time={this.state.post_time} content={this.state.content} likeAction={this.likeTheme} deleteAction={this.deleteTheme}/>
                         </div>
                     </div>
                     <style jsx>{threadThemeStyle}</style>
@@ -740,10 +380,12 @@ class ThreadPost extends Component {
             is_liked: this.props.post['is_liked'],
             reply: this.props.post['reply'],
             avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+            is_admin: 0,
         };
-        this.likeAction = this.likeAction.bind(this);
+        this.likePost = this.likePost.bind(this);
+        this.deletePost = this.deletePost.bind(this);
     }
-    likeAction() {
+    likePost() {
         var like_count = this.state.is_liked ? this.state.like_count-1 : this.state.like_count+1;
         var method = '';
         if (isLogin()) {
@@ -773,13 +415,28 @@ class ThreadPost extends Component {
             console.log('Please login to Continue. [Like]');
         }  
     }
+    deletePost() {
+        console.log('Delete tid '+this.state.tid+' rid '+this.state.rid);
+        fetch(bindURL + '/api/posts/' + this.state.tid + '/' + this.state.rid, {
+            method: 'DELETE',
+            credentials: 'include',
+        })
+        .then(function(response) {
+            if(response.status == 200) {
+                console.log('Delete success.');
+                location.replace(location.href);
+            } else {
+                console.log('Delete failed.');
+            }
+        })
+    }
     render() {
         return (
             <div className="thread-post">
                 <div className="forum-post">
-                    <PosterInfo uid={this.state.uid} username={this.state.username} reg_time={this.state.reg_time} avatar={this.state.avatar} lvl="lvl1"/>
+                    <PosterInfo uid={this.state.uid} username={this.state.username} reg_time={this.state.reg_time} avatar={this.state.avatar} lvl={this.state.is_admin?"lvl2":"lvl1"}/>
                     <div className="forum-post-body">
-                        <PostBody is_liked={this.state.is_liked} like_count={this.state.like_count} post_time={this.state.post_time} content={this.state.content} likeAction={this.likeAction}/>
+                        <PostBody uid={this.state.uid} is_liked={this.state.is_liked} like_count={this.state.like_count} post_time={this.state.post_time} content={this.state.content} likeAction={this.likePost} deleteAction={this.deletePost}/>
                         <PostReplies tid={this.state.tid} rid={this.state.rid} reply={this.state.reply} />
                     </div>
                 </div>
@@ -839,7 +496,7 @@ class ThreadReply extends Component {
             .then(function(response) {
                 if(response.status == 200) {
                     console.log("Post success.");
-                    location.replace(location.href);
+                    {/*location.replace(location.href);*/}
                 } else {
                     console.log("Post failed.");
                 }
@@ -865,7 +522,7 @@ class ThreadReply extends Component {
             <div className="reply-wrapper">
                 <div className="thread-post">
                     <div className="forum-post">
-                        <PosterInfo uid={this.state.uid} username={this.state.nickname} reg_time={this.state.reg_time} avatar={this.state.avatar} lvl="lvl1"/>
+                        <PosterInfo uid={this.state.uid} username={this.state.nickname} reg_time={this.state.reg_time} avatar={this.state.avatar} lvl={isAdmin()?"lvl2":"lvl1"}/>
                         <div className="forum-post-body">
                             <div className="content-wrapper">
                                 <div className="content">
@@ -928,13 +585,27 @@ class PostBody extends Component {
         this.state = {
         };
     }
-
     render() {
         return (
             <div>
                 <div className="header-wrapper">
                     <LikeButton is_liked={this.props.is_liked} like_count={this.props.like_count} likeAction={this.props.likeAction}/>
                     <div className="header">
+                        {
+                            canDelete(this.props.uid)
+                            ?
+                                <div className='header-warning' onClick={this.props.deleteAction}>
+                                    <span className='svg-wrapper'>
+                                        <svg className="warning-svg" fill="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                                            <path d="M16.464 4s.051-2-1.479-2H9C7.194 2 7.465 4 7.465 4H4.752c-2.57 0-2.09 3.5 0 3.5l1.213 13.027S5.965 22 7.475 22h8.987c1.502 0 1.502-1.473 1.502-1.473l1.2-13.027c2.34 0 2.563-3.5 0-3.5h-2.7zM8.936 18.5l-.581-9h1.802v9H8.936zm4.824 0v-9h1.801l-.61 9H13.76z" fillRule="evenodd">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    Delete
+                                </div>
+                            :
+                                <div></div>
+                        }
                         {this.props.post_time}
                     </div>
                 </div>
@@ -953,11 +624,11 @@ class PostReplies extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            tid: this.props.tid,
+            rid: this.props.rid,
             replies: this.props.reply,
             panel: false,
             rcontent: '',
-            rid: this.props.rid,
-            tid: this.props.tid,
         };
         this.showReplyPanel = this.showReplyPanel.bind(this);
         this.postReplyReply = this.postReplyReply.bind(this);
@@ -986,7 +657,7 @@ class PostReplies extends Component {
                 console.log('Thread reply error.', ex)
             })
         } else {
-            console.log("Empty rcontent.");
+            console.log("Empty reply content.");
         }
     }
     handleChange(event) {
@@ -998,7 +669,7 @@ class PostReplies extends Component {
         var replyList = [];
         for (var i = 0; i < this.state.replies.length; i++){
             replyList.push(
-                <PostReply reply={this.state.replies[i]} id={i} key={'rep'+i}/>
+                <PostReply reply={this.state.replies[i]} tid={this.state.tid} rid={this.state.rid} key={'rep'+i}/>
             );
         }
         return (
@@ -1035,6 +706,8 @@ class PostReply extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            tid: this.props.tid,
+            rid: this.props.rid,
             rrid: this.props.reply['rrid'],
             uid: this.props.reply['uid'], 
             username: this.props.reply['username'], 
@@ -1043,6 +716,22 @@ class PostReply extends Component {
             like_count: this.props.reply['like_count'], 
             is_liked: this.props.reply['is_liked'], 
         };
+        this.deleteReply = this.deleteReply.bind(this);
+    }
+    deleteReply() {
+        console.log('Delete tid '+this.state.tid+' rid '+this.state.rid+' rrid '+this.state.rrid);
+        fetch(bindURL+'/api/posts/'+this.state.tid+'/'+this.state.rid+'/'+this.state.rrid, {
+            method: 'DELETE',
+            credentials: 'include',
+        })
+        .then(function(response) {
+            if(response.status == 200) {
+                console.log('Delete success.');
+                location.replace(location.href);
+            } else {
+                console.log('Delete failed.');
+            }
+        })
     }
     render() {
         return (
@@ -1056,11 +745,30 @@ class PostReply extends Component {
                     </div>
                 </div>
                 <div className='time-wrapper'>
-                    <div className='reply-time'>
-                        {this.state.post_time}
+                    <div className="header">
+                        {/* To-Do: rebuild with postBody */}
+                        {
+                            canDelete(this.state.uid)
+                            ?
+                                <div className='header-warning' onClick={this.deleteReply}>
+                                    <span className='svg-wrapper'>
+                                        <svg className="warning-svg" fill="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                                            <path d="M16.464 4s.051-2-1.479-2H9C7.194 2 7.465 4 7.465 4H4.752c-2.57 0-2.09 3.5 0 3.5l1.213 13.027S5.965 22 7.475 22h8.987c1.502 0 1.502-1.473 1.502-1.473l1.2-13.027c2.34 0 2.563-3.5 0-3.5h-2.7zM8.936 18.5l-.581-9h1.802v9H8.936zm4.824 0v-9h1.801l-.61 9H13.76z" fillRule="evenodd">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    Delete
+                                </div>
+                            :
+                                <div></div>
+                        }
+                        <div className='reply-time'>
+                            {this.state.post_time}
+                        </div>
                     </div>
                 </div>
-                <style jsx>{postReplyLink}</style>
+                {postReplyLink.styles}
+                <style jsx>{postBodyStyle}</style>
                 <style jsx>{postReplyStyle}</style>
             </div>
         )
@@ -1073,7 +781,6 @@ class LikeButton extends Component {
         this.state = {
         };
     }
-
     render() {
         return (
             <div>
@@ -1199,11 +906,9 @@ class CreateTopic extends Component {
 
 module.exports = {
     bindURL: bindURL,
-    TopBar: TopBar,
     TopBG: TopBG,
     Forums: Forums, 
     About: About,
-    User: User,
     Thread: Thread,
     Account: Account,
     CreateTopic: CreateTopic,
