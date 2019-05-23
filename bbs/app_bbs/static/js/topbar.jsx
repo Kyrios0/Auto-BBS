@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 
 import {bindURL, isLogin, isAdmin} from "./basic.jsx"
 
+import {NormalButton} from "./widgets.jsx"
 import {topBarStyle, panelStyle, panelBoxStyle} from "./topbarStyles.jsx"
 import {topbarLink, userMenuLink, } from "./linkStyles.jsx";
 
@@ -32,7 +33,7 @@ class TopBar extends Component {
     }
     initTopbar(json) {
         var nickname = json['nickname'];
-        if (isAdmin()) {
+        if (json['is_admin']) {
             nickname = '[Admin] ' + nickname;
         }
         this.setState({

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
-import {isLogin} from "./basic.jsx"
-import {topBGv2Style} from "./userStyles.jsx"
+import {bindURL, isLogin} from "./basic.jsx"
+import {topBGv2Style, profileStyle} from "./userStyles.jsx"
 
 class User extends Component {
     constructor(props) {
@@ -22,10 +22,22 @@ class User extends Component {
                             <RelateActive/>
                         </div>
                     :
-                        <div>
-                            'Please Login First.'
-                        </div>
+                        <h1 className="error">
+                            Please Login First.
+                        </h1>
                 }
+                <style jsx>{`
+                    .error {
+                        color: #fff;
+                        text-align: center;
+                    }
+                `}</style>
+                <style jsx global>{`
+                    body:before {
+                        background-color: #111 !important;
+                        background-image: none;
+                    }
+                `}</style>
             </div>
         )
     }
@@ -64,28 +76,54 @@ class Profile extends Component {
     constructor() {
         super();
         this.state = {
-            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png",
+            avatar: "/static/img/Blood.png",
             nickname: "",
+            reg_time: "",
+            self_intro: "",
         };
-    }
 
+        this.initProfile = this.initProfile.bind(this);
+        fetch(bindURL + '/api/users', {
+            credentials: 'include',
+        })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(this.initProfile)
+        .catch(function(ex) {
+            console.log('Init profile failed', ex)
+        })
+    }
+    initProfile(json) {
+        this.setState({
+            nickname: json['nickname'],
+            reg_time: json['reg_time'],
+            self_intro: json['selfinfo'],
+        })
+    }
     render() {
         return (
-            <div className="profile-top">
-                <div className="profile-info">
-                    <div className="profile-info-avatar" style={{backgroundImage: 'url('+this.state.avatar+')'}}>
+            <div className="mod-wrapper">
+                <div className="profile-header">
+                    <div className="profile-top">
+                        <div className="profile-info">
+                            <div className="avatar-wrapper">
+                                <img className="profile-info-avatar" src={this.state.avatar}/>
+                            </div>
+                            <div className="profile-info-details">
+                                <h1 className="profile-info-name">
+                                    {this.state.nickname}
+                                </h1>
+                            </div>
+                        </div>
+                        <div className="profile-stat">
 
-                    </div>
-                    <div className="profile-info-details">
-                        <h1 className="profile-info-name">
-                            {this.state.nickname}
-                        </h1>
+                        </div>
                     </div>
                 </div>
-                <div className="profile-stat">
-
-                </div>
+                <style jsx>{profileStyle}</style>
             </div>
+            
         )
     }
 };

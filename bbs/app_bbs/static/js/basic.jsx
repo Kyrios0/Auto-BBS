@@ -1,5 +1,5 @@
 
-var bindURL = "http://119.28.22.85:6712";
+var bindURL = "http://192.168.1.7:5000";
 
 function getCookieItem(sKey) {
     return document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + sKey.replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1");
