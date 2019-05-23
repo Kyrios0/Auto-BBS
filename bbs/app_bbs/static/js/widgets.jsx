@@ -21,7 +21,15 @@ function isLogin() {
 }
 
 function isAdmin() {
-    return getCookieItem('isAdmin') == 'true';
+    return getCookieItem('isAdmin') == 1;
+}
+
+function isSelf(uid) {
+    return getCookieItem('uid') == uid;
+}
+
+function canDelete(uid) {
+    return isSelf(uid) | isAdmin();
 }
 
 class TopBar extends Component {
@@ -49,9 +57,13 @@ class TopBar extends Component {
         }
     }
     initTopbar(json) {
+        var nickname = json['nickname'];
+        if (isAdmin()) {
+            nickname = '[Admin] ' + nickname;
+        }
         this.setState({
             uid: json['uid'],
-            focusText: json['nickname'],
+            focusText: nickname,
             user: json
         })
     }
@@ -627,7 +639,8 @@ class ThreadTheme extends Component {
 
         };
         this.initTheme = this.initTheme.bind(this);
-        this.likeAction = this.likeAction.bind(this);
+        this.likeTheme = this.likeTheme.bind(this);
+        this.deleteTheme = this.deleteTheme.bind(this);
         fetch(bindURL + '/api/topic/' + this.state.tid)
         .then(function(response) {
             return response.json()
@@ -648,7 +661,7 @@ class ThreadTheme extends Component {
             is_liked: json['is_liked']
         })
     }
-    likeAction() {
+    likeTheme() {
         var like_count = this.state.is_liked ? this.state.like_count-1 : this.state.like_count+1;
         var method = '';
         if (isLogin()) {
@@ -678,6 +691,21 @@ class ThreadTheme extends Component {
             console.log('Please login to Continue. [Like]');
         }  
     }
+    deleteTheme() {
+        console.log('Delete tid '+this.state.tid);
+        fetch(bindURL + '/api/topic/' + this.state.tid, {
+            method: 'DELETE',
+            credentials: 'include',
+        })
+        .then(function(response) {
+            if(response.status == 200) {
+                console.log('Delete success.');
+                location.replace(location.origin);
+            } else {
+                console.log('Delete failed.');
+            }
+        })
+    }
     render() {
         return (
             <div>
@@ -686,7 +714,7 @@ class ThreadTheme extends Component {
                     <div className="forum-post">
                         <PosterInfo uid={this.state.uid} username={this.state.username} reg_time={this.state.reg_time} avatar={this.state.avatar} lvl="lvl1"/>
                         <div className="forum-post-body">
-                            <PostBody is_liked={this.state.is_liked} like_count={this.state.like_count} post_time={this.state.post_time} content={this.state.content} likeAction={this.likeAction}/>
+                            <PostBody uid={this.state.uid} is_liked={this.state.is_liked} like_count={this.state.like_count} post_time={this.state.post_time} content={this.state.content} likeAction={this.likeTheme} deleteAction={this.deleteTheme}/>
                         </div>
                     </div>
                     <style jsx>{threadThemeStyle}</style>
@@ -746,9 +774,10 @@ class ThreadPost extends Component {
             reply: this.props.post['reply'],
             avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
         };
-        this.likeAction = this.likeAction.bind(this);
+        this.likePost = this.likePost.bind(this);
+        this.deletePost = this.deletePost.bind(this);
     }
-    likeAction() {
+    likePost() {
         var like_count = this.state.is_liked ? this.state.like_count-1 : this.state.like_count+1;
         var method = '';
         if (isLogin()) {
@@ -778,13 +807,28 @@ class ThreadPost extends Component {
             console.log('Please login to Continue. [Like]');
         }  
     }
+    deletePost() {
+        console.log('Delete tid '+this.state.tid+' rid '+this.state.rid);
+        fetch(bindURL + '/api/posts/' + this.state.tid + '/' + this.state.rid, {
+            method: 'DELETE',
+            credentials: 'include',
+        })
+        .then(function(response) {
+            if(response.status == 200) {
+                console.log('Delete success.');
+                location.replace(location.href);
+            } else {
+                console.log('Delete failed.');
+            }
+        })
+    }
     render() {
         return (
             <div className="thread-post">
                 <div className="forum-post">
                     <PosterInfo uid={this.state.uid} username={this.state.username} reg_time={this.state.reg_time} avatar={this.state.avatar} lvl="lvl1"/>
                     <div className="forum-post-body">
-                        <PostBody is_liked={this.state.is_liked} like_count={this.state.like_count} post_time={this.state.post_time} content={this.state.content} likeAction={this.likeAction}/>
+                        <PostBody uid={this.state.uid} is_liked={this.state.is_liked} like_count={this.state.like_count} post_time={this.state.post_time} content={this.state.content} likeAction={this.likePost} deleteAction={this.deletePost}/>
                         <PostReplies tid={this.state.tid} rid={this.state.rid} reply={this.state.reply} />
                     </div>
                 </div>
@@ -933,13 +977,27 @@ class PostBody extends Component {
         this.state = {
         };
     }
-
     render() {
         return (
             <div>
                 <div className="header-wrapper">
                     <LikeButton is_liked={this.props.is_liked} like_count={this.props.like_count} likeAction={this.props.likeAction}/>
                     <div className="header">
+                        {
+                            canDelete(this.props.uid)
+                            ?
+                                <div className='header-warning' onClick={this.props.deleteAction}>
+                                    <span className='svg-wrapper'>
+                                        <svg className="warning-svg" fill="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                                            <path d="M16.464 4s.051-2-1.479-2H9C7.194 2 7.465 4 7.465 4H4.752c-2.57 0-2.09 3.5 0 3.5l1.213 13.027S5.965 22 7.475 22h8.987c1.502 0 1.502-1.473 1.502-1.473l1.2-13.027c2.34 0 2.563-3.5 0-3.5h-2.7zM8.936 18.5l-.581-9h1.802v9H8.936zm4.824 0v-9h1.801l-.61 9H13.76z" fillRule="evenodd">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    Delete
+                                </div>
+                            :
+                                <div></div>
+                        }
                         {this.props.post_time}
                     </div>
                 </div>
@@ -958,11 +1016,11 @@ class PostReplies extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            tid: this.props.tid,
+            rid: this.props.rid,
             replies: this.props.reply,
             panel: false,
             rcontent: '',
-            rid: this.props.rid,
-            tid: this.props.tid,
         };
         this.showReplyPanel = this.showReplyPanel.bind(this);
         this.postReplyReply = this.postReplyReply.bind(this);
@@ -991,7 +1049,7 @@ class PostReplies extends Component {
                 console.log('Thread reply error.', ex)
             })
         } else {
-            console.log("Empty rcontent.");
+            console.log("Empty reply content.");
         }
     }
     handleChange(event) {
@@ -1003,7 +1061,7 @@ class PostReplies extends Component {
         var replyList = [];
         for (var i = 0; i < this.state.replies.length; i++){
             replyList.push(
-                <PostReply reply={this.state.replies[i]} id={i} key={'rep'+i}/>
+                <PostReply reply={this.state.replies[i]} tid={this.state.tid} rid={this.state.rid} key={'rep'+i}/>
             );
         }
         return (
@@ -1040,6 +1098,8 @@ class PostReply extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            tid: this.props.tid,
+            rid: this.props.rid,
             rrid: this.props.reply['rrid'],
             uid: this.props.reply['uid'], 
             username: this.props.reply['username'], 
@@ -1048,6 +1108,22 @@ class PostReply extends Component {
             like_count: this.props.reply['like_count'], 
             is_liked: this.props.reply['is_liked'], 
         };
+        this.deleteReply = this.deleteReply.bind(this);
+    }
+    deleteReply() {
+        console.log('Delete tid '+this.state.tid+' rid '+this.state.rid+' rrid '+this.state.rrid);
+        fetch(bindURL+'/api/posts/'+this.state.tid+'/'+this.state.rid+'/'+this.state.rrid, {
+            method: 'DELETE',
+            credentials: 'include',
+        })
+        .then(function(response) {
+            if(response.status == 200) {
+                console.log('Delete success.');
+                location.replace(location.href);
+            } else {
+                console.log('Delete failed.');
+            }
+        })
     }
     render() {
         return (
@@ -1061,11 +1137,30 @@ class PostReply extends Component {
                     </div>
                 </div>
                 <div className='time-wrapper'>
-                    <div className='reply-time'>
-                        {this.state.post_time}
+                    <div className="header">
+                        {/* To-Do: rebuild with postBody */}
+                        {
+                            canDelete(this.state.uid)
+                            ?
+                                <div className='header-warning' onClick={this.deleteReply}>
+                                    <span className='svg-wrapper'>
+                                        <svg className="warning-svg" fill="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                                            <path d="M16.464 4s.051-2-1.479-2H9C7.194 2 7.465 4 7.465 4H4.752c-2.57 0-2.09 3.5 0 3.5l1.213 13.027S5.965 22 7.475 22h8.987c1.502 0 1.502-1.473 1.502-1.473l1.2-13.027c2.34 0 2.563-3.5 0-3.5h-2.7zM8.936 18.5l-.581-9h1.802v9H8.936zm4.824 0v-9h1.801l-.61 9H13.76z" fillRule="evenodd">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    Delete
+                                </div>
+                            :
+                                <div></div>
+                        }
+                        <div className='reply-time'>
+                            {this.state.post_time}
+                        </div>
                     </div>
                 </div>
                 {postReplyLink.styles}
+                <style jsx>{postBodyStyle}</style>
                 <style jsx>{postReplyStyle}</style>
             </div>
         )
@@ -1078,7 +1173,6 @@ class LikeButton extends Component {
         this.state = {
         };
     }
-
     render() {
         return (
             <div>

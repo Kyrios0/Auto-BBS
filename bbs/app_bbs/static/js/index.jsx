@@ -19,8 +19,27 @@ class AutoBBS extends Component {
         .then(function(response) {
             if (response.status == 200) {
                 document.cookie = 'isLogin=true;path=/;';
+                fetch(bindURL + '/api/users', {
+                    credentials: 'include',
+                })
+                .then(function(response) {
+                    return response.json();
+                    
+                })
+                .then(function(json) {
+                    if (response.status == 200) {
+                        document.cookie = 'uid=' + json['uid'] + ';path=/;';
+                        document.cookie = 'isAdmin=' + json['is_admin'] + ';path=/;';
+                    } else {
+                        console.log('Init user error.');
+                        document.cookie = 'uid=-1;path=/;';
+                        document.cookie = 'isAdmin=0;path=/;';
+                    }
+                })
             } else {
                 document.cookie = 'isLogin=false;path=/;';
+                document.cookie = 'uid=-1;path=/;';
+                document.cookie = 'isAdmin=0;path=/;';
             }
         })
         .catch(function(ex) {

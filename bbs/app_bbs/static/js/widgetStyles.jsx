@@ -411,6 +411,20 @@ const postBodyStyle = css`
     }
     .header {
         color: #999;
+        display: flex;
+        flex-direction: row;
+    }
+    .header-warning {
+        display: flex;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+    .svg-wrapper {
+        display: inline-flex;
+        align-items: center;
+    }
+    .warning-svg {
+        margin-right: 5px;
     }
     .content-wrapper {
         padding: 20px 30px;
@@ -510,7 +524,7 @@ const postReplyStyle = css`
         flex-direction: row;
     }
     .reply-content {
-
+        margin-left: 5px;
     }
     .time-wrapper {
         display: flex;
