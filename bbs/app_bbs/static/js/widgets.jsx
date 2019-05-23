@@ -235,7 +235,7 @@ class ThreadTheme extends Component {
         this.state = {
             tid: this.props.id, 
             topic_name: "",
-            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+            avatar: "/static/img/Blood.png", 
             uid: "",
             username: "",
             content: "",
@@ -379,7 +379,7 @@ class ThreadPost extends Component {
             like_count: this.props.post['like_count'],
             is_liked: this.props.post['is_liked'],
             reply: this.props.post['reply'],
-            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+            avatar: "/static/img/Blood.png", 
             is_admin: 0,
         };
         this.likePost = this.likePost.bind(this);
@@ -453,7 +453,7 @@ class ThreadReply extends Component {
         this.state = {
             tid: this.props.id,
             content: "",
-            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+            avatar: "/static/img/Blood.png", 
             uid: "",
             nickname: "",
             reg_time: "",
@@ -804,7 +804,7 @@ class CreateTopic extends Component {
         this.state = {
             topic_name: "",
             content: "",
-            avatar: "https://blog.kyrios.cn/wp-content/uploads/2017/04/Blood.png", 
+            avatar: "/static/img/Blood.png", 
             uid: "",
             nickname: "",
             reg_time: "",

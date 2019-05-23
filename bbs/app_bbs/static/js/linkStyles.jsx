@@ -67,7 +67,7 @@ const createButtonLink = resolveScopeStyles(
                 border: none;
                 display: inline-block;
                 background-color: #29b;
-                background-image: url("https://osu.ppy.sh/images/backgrounds/buttonblue@2x.png");
+                background-image: url("/static/img/buttonblue@2x.png");
                 background-size: cover;
                 background-position: 50% 50%;
                 transition: background-position .12s;

@@ -35,7 +35,7 @@ class TopBGv2 extends Component {
     constructor() {
         super();
         this.state = {
-            image: 'https://osu.ppy.sh/images/headers/profile-covers/c4.jpg',
+            image: '/static/img/c4.jpg',
 
         };
     }

@@ -2,7 +2,9 @@ venv/
 node_modules/
 .vscode/
 bbs/app_bbs/static/js/*.js
+bbs/app_bbs/static/img/*
 
 *.bak
 *.pyc
 *.pyo
+bbs/app_bbs/static/css/bootstrap.min.css

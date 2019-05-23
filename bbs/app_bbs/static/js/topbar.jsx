@@ -53,7 +53,7 @@ class TopBar extends Component {
                             <div className="ul">
                                 <div className="li">
                                     <Link to="/" className={`link ${topbarLink.className}`}>
-                                        <img style={{height: 50+'px'}} src="https://blog.kyrios.cn/wp-content/uploads/2019/04/auto-bbs.png"/>
+                                        <img style={{height: 50+'px'}} src="/static/img/auto-bbs.png"/>
                                     </Link>
                                 </div>
                                 <div className="li">
