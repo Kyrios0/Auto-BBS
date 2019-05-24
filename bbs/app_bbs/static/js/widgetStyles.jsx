@@ -138,6 +138,9 @@ const threadEntryStyle = css`
         background-position: 50%;
         color: #fff;
     }
+    .hot {
+        background-color: #c60 !important;
+    }
     .c1 {
         width: 50px;
         text-align: center;

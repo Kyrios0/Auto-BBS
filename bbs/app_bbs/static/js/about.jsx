@@ -12,7 +12,16 @@ class About extends Component {
             <div>
                 <div>
                     <h1 className="error">
-                        Under Construction.
+                        Kyr1os: frontend-development
+                    </h1>
+                    <h1 className="error">
+                        blacsheep: backend-development
+                    </h1>
+                    <h1 className="error">
+                        EliAyase: database support&testing
+                    </h1>
+                    <h1 className="error">
+                        TGWarWolf: testing&document
                     </h1>
                 </div>     
                 <style jsx>{`

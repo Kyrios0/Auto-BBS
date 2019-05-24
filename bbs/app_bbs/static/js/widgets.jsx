@@ -57,14 +57,16 @@ class TopBG extends Component {
 };
 
 class ThreadEntry extends Component {
+    constructor(props) {
+        super(props);
+    }
     render() {
         return (
             <div className="topic_entry_bg">
                 <div className="topic_entry">
                     <div className="row">
                         <div className="topic_entry_content c1">
-                            <div className="topic_entry_col">
-                                
+                            <div className={"topic_entry_col" + (this.props.topic['hot']?" hot":"")}>  
                             </div>
                         </div>
                         <div className="topic_entry_content c2">
@@ -237,7 +239,8 @@ class ThreadTheme extends Component {
             post_time: json['post_time'],
             reg_time: json['reg_time'], 
             like_count: json['like_count'], 
-            is_liked: json['is_liked']
+            is_liked: json['is_liked'],
+            is_admin: json['is_admin'],
         })
     }
     likeTheme() {
@@ -352,9 +355,9 @@ class ThreadPost extends Component {
             content: this.props.post['content'],
             like_count: this.props.post['like_count'],
             is_liked: this.props.post['is_liked'],
+            is_admin: this.props.post['is_admin'],
             reply: this.props.post['reply'],
             avatar: "/static/img/Blood.png", 
-            is_admin: 0,
         };
         this.likePost = this.likePost.bind(this);
         this.deletePost = this.deletePost.bind(this);
