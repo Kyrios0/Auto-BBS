@@ -22,5 +22,9 @@ api.add_resource(AgreeApi, '/api/agree/<int:tid>',
                  '/api/agree/<int:tid>/<int:rid>/<int:rrid>')
 
 
+@app.route('/<path:path>')
+def all(path):
+    return render_template('dev.html')
+
 if __name__ == '__main__':
     app.run()

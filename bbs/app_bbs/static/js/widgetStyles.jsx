@@ -1,110 +1,11 @@
 import css from 'styled-jsx/css'
-//#region topBarStyle
-const topBarStyle = css`
-    #mainmenu {
-        overflow: hidden;
-        background-color: rgb(34, 34, 34);
-    }
-    .nav {
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-    .left {
-        display: flex;
-    }
-    .right {
-        margin-left: auto;
-    }
-    .ul {
-        background-color: rgb(34, 34, 34);
-    }
-    .li {
-        float: left;
-        font-size: 1.085em;
-    }
-    .link {
-        display: block;
-        color: white;
-        text-align: center;
-        padding: 5px 16px;
-        text-decoration: none;
-        line-height: 55px;
-    } 
-    .link:hover:not(.active) {
-        background-color: rgb(40, 40, 40);
-    }
-    .link.active {
-        background-color: #591804;
-        color: #fff;
-    }
-    .link.active:hover {
-        background-color: #b87563;
-        color: #fff;
-    }
-`
-//#endregion
-//#region panelStyle
-const panelStyle = css`
-    .panel-wrapper {
-        left: -235px;
-        margin-top: 65px;
-    }
-    .lr-panel {
-        position: fixed;
-        z-index: 999;
-        margin-top: 5px;
-    }
-    .lr-panel-content {
-        width: 300px;
-        margin-top: 5px;
-        border-radius: 4px;
-        display: flex;
-        flex-direction: column;
-        font-size: 12px;
-        background-color: #333;
-        padding: 20px 20px 0;
-    }
-    .box-controller {
-        color: #fff;
-        font-size: 15px;
-        font-style: normal;
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: space-around;
-    }
-    .selected {
-        color: #fc2;
-    }
-`
-//#endregion
-//#region panelBoxStyle
-const panelBoxStyle = css`
-    .panel-box {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 5px;
-    }
-    input {
-        border-radius: 4px;
-        border: none;
-        background-color: #222;
-        padding: 10px 5px;
-        margin-bottom: 5px;
-        color: #999;
-    }
-    .panel-box-buttom {
-        display: flex;
-        justify-content: flex-end;
-    }
-`
-//#endregion
 //#region normalButton
 const normalButtonStyle = css`
-    .nb {
+    .kb {
         border: none;
         display: inline-block;
         background-color: #29b;
-        background-image: url("https://osu.ppy.sh/images/backgrounds/buttonblue@2x.png");
+        background-image: url("/static/img/buttonblue@2x.png");
         background-size: cover;
         background-position: 50% 50%;
         transition: background-position .12s;
@@ -118,17 +19,30 @@ const normalButtonStyle = css`
 
         border-radius: 4px;
         padding: 0 10px;
-        height: 36px;
-        width: 120px;
+
         vertical-align: middle;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 10px 0;
+        margin: 10px 0px;
     }
-    .nb:hover {
+    .kb:hover {
         background-position: calc(50% - 20px) 50%;
         text-decoration: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+    }
+    .normal {
+        height: 36px;
+        width: 120px;
+    }
+    .small {
+        height: 24px;
+        width: 80px;
+    }
+    .margin-10 {
+        margin: 10px 10px;
     }
 }
 `
@@ -142,7 +56,7 @@ const topBGStyle = css`
         overflow: hidden;
         display: flex;
         align-items: flex-end;
-        background: rgba(0, 0, 0, 0) url("https://blog.kyrios.cn/wp-content/uploads/2019/04/bbs_head2.jpg") repeat scroll left bottom;
+        background: rgba(0, 0, 0, 0) url("/static/img/bbs_head2.jpg") repeat scroll left bottom;
     }
     .head_bg::before {
         position: absolute;
@@ -161,7 +75,7 @@ const topBGStyle = css`
         margin: 20px 70px;
         width: 237px;
         height: 100px;
-        background: rgba(0, 0, 0, 0) url("https://blog.kyrios.cn/wp-content/uploads/2019/03/logow_100px.png") repeat scroll 0% 0%;
+        background: rgba(0, 0, 0, 0) url("/static/img/logow_100px.png") repeat scroll 0% 0%;
     }
     .title-text {
         padding: 10px 0 10px 20px;
@@ -178,8 +92,8 @@ const topBGStyle = css`
     }
 `
 //#endregion
-//#region ThreadEntryStyle
-const ThreadEntryStyle = css`
+//#region threadEntryStyle
+const threadEntryStyle = css`
     .topic_entry {
         margin: 0 40px;
     }
@@ -212,6 +126,18 @@ const ThreadEntryStyle = css`
         line-height: 1.83em;
         flex: none;
     }
+    .topic_entry_col {
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        align-self: center
+        font-size: 16px;
+        background-color: #777;
+        background-image: url(/static/img/button.svg);
+        background-size: 50px;
+        background-position: 50%;
+        color: #fff;
+    }
     .c1 {
         width: 50px;
         text-align: center;
@@ -224,7 +150,7 @@ const ThreadEntryStyle = css`
         text-align: left;
     }
     .c3, .c4 {
-        width: 140px;
+        width: 150px;
         text-align: right;
         color: #58697b;
         font-size: 0.923em;
@@ -234,7 +160,7 @@ const ThreadEntryStyle = css`
 //#region forumsStyle
 const forumsStyle = css`
     .mod_wrap {
-        text-align: center;
+        
         margin: 0px 10px 8px 10px;
     }
     .forumbox {
@@ -251,9 +177,20 @@ const forumsStyle = css`
         display: flex;
         align-items: center;
         margin: 30px 40px;
+        justify-content: space-between;
+    }
+    .forum-topics-title {
+        color: #262626;
+        font-size: 16px;
+        margin: 30px 0 0;
+        padding: 0 40px 5px;
+        font-style: italic;
     }
     .btn_content {
         margin: 0 5px;
+    }
+    .thread-order {
+        display: flex;
     }
 `
 //#endregion
@@ -271,6 +208,9 @@ const threadThemeStyle = css`
         margin-bottom: 5px;
         display: flex;
         flex-direction: row;
+    }
+    .forum-post-body {
+        width: 100%;
     }
 `
 //#endregion
@@ -315,7 +255,7 @@ const posterInfoStyle = css`
         left: 0;
         height: 100%;
         width: 100%;
-        background-image: url(https://osu.ppy.sh/images/backgrounds/button.svg);
+        background-image: url(/static/img/button.svg);
         background-size: 300px;
         opacity: .5;
     }
@@ -329,6 +269,9 @@ const posterInfoStyle = css`
     }
     .lvl1 {
         background-color: #29b;
+    }
+    .lvl2 {
+        background-color: #3366FF;
     }
     .avatar_wrapper {
         background-size: 153px 83px;
@@ -366,6 +309,20 @@ const postBodyStyle = css`
     }
     .header {
         color: #999;
+        display: flex;
+        flex-direction: row;
+    }
+    .header-warning {
+        display: flex;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+    .svg-wrapper {
+        display: inline-flex;
+        align-items: center;
+    }
+    .warning-svg {
+        margin-right: 5px;
     }
     .content-wrapper {
         padding: 20px 30px;
@@ -394,21 +351,99 @@ const threadPostStyle = css`
     }
     .forum-post-body {
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 `
 //#endregion
+//#region createTopicStyle
+const createTopicStyle = css`
+    .title-input {
+        background: none;
+        border: none;
+        outline: none;
+        color: #fff;
+        width: 100%;
+        font-weight: 500;
+        font-size: 36px;
+        font-style: italic;
+    }
+    .content-input {
+        min-height: 300px;
+        outline: none;
+        border: none;
+        background: none;
+        resize: vertical;
+        width: 100%;
+        font-size: 13px;
+        font-family: Menlo,Monaco,Consolas,Courier New,monospace;
+    }
+    .edit-bar {
+        background-color: #444;
+        padding: 10px 30px;
+    }
+    .editor-footer {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .reply-wrapper {
+        background-color: #444;
+    }
+`
+//#endregion
+//#region postReplyStyle
+const postReplyStyle = css`
+    .reply-wrapper {
+        padding: 0px 30px 20px;
+    }
+    .reply-menu {
+        padding: 10px 30px 0px;
+        background: #f7f8fa;
+        border: 1px solid #f0f1f2;
+    }
+    .reply-footer {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .rcontent-input {
+        width: 100%;
+        border: 2px solid #d6dffa;
+    }
+    .reply-singleline {
+        display: flex;
+        flex-direction: column;
+        padding-top: 2px;
+    }
+    .reply-linebody {
+        display: flex;
+        flex-direction: row;
+    }
+    .reply-content {
+        margin-left: 5px;
+    }
+    .time-wrapper {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .reply-time {
+        color: rgb(153, 153, 153);
+    }
+`
+//#endregion
+
 module.exports = {
-    topBarStyle: topBarStyle,
-    panelStyle: panelStyle,
-    panelBoxStyle: panelBoxStyle,
     normalButtonStyle, normalButtonStyle,
     topBGStyle: topBGStyle,
-    ThreadEntryStyle: ThreadEntryStyle,
+    threadEntryStyle: threadEntryStyle,
     forumsStyle: forumsStyle,
     threadThemeStyle: threadThemeStyle,
     likeButtonStyle: likeButtonStyle, 
     posterInfoStyle: posterInfoStyle, 
     postBodyStyle: postBodyStyle,
     threadPostStyle: threadPostStyle, 
-
+    createTopicStyle: createTopicStyle,
+    postReplyStyle: postReplyStyle,
 }

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 function resolveScopeStyles(scope) {
     return {
@@ -14,9 +14,9 @@ const topbarLink = resolveScopeStyles(
                 display: block;
                 color: white;
                 text-align: center;
-                padding: 5px 16px;
+                padding: 0px 16px;
                 text-decoration: none;
-                line-height: 55px;
+                line-height: 53px;
             } 
             .link:hover:not(.active) {
                 background-color: rgb(40, 40, 40);
@@ -29,6 +29,10 @@ const topbarLink = resolveScopeStyles(
             .link.active:hover {
                 background-color: #b87563;
                 color: #fff;
+                cursor: pointer;
+                user-select: none;
+                -webkit-user-select: none;
+                -moz-user-select: none;
             }
         `}</style>
     </div>
@@ -63,7 +67,7 @@ const createButtonLink = resolveScopeStyles(
                 border: none;
                 display: inline-block;
                 background-color: #29b;
-                background-image: url("https://osu.ppy.sh/images/backgrounds/buttonblue@2x.png");
+                background-image: url("/static/img/buttonblue@2x.png");
                 background-size: cover;
                 background-position: 50% 50%;
                 transition: background-position .12s;
@@ -120,10 +124,37 @@ const usernameLink = resolveScopeStyles(
     </div>
 )
 
+const userMenuLink = resolveScopeStyles(
+    <div>
+        <style jsx>{`
+            .menu {
+                padding: 5px 25px;
+                color: #fff;
+                text-decoration: none;
+            }
+            .menu:hover {
+                background-color: #111;
+            }
+        `}</style>
+    </div>
+)
+
+const postReplyLink = resolveScopeStyles(
+    <div>
+        <style jsx>{`
+            .responder {
+                
+            }
+        `}</style>
+    </div>
+)
+
 module.exports = {
     topbarLink: topbarLink,
     threadLink: threadLink,
-    createButtonLink: createButtonLink, 
-    avatarLink: avatarLink, 
-    usernameLink: usernameLink, 
+    createButtonLink: createButtonLink,
+    avatarLink: avatarLink,
+    usernameLink: usernameLink,
+    userMenuLink: userMenuLink,
+    postReplyLink: postReplyLink,
 }
