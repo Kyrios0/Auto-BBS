@@ -14,12 +14,13 @@ class LoginApi(Resource):
         else:
             message = "false"
             return_json = {"message": message}
-            status_code = 503
+            status_code = 403
 
         response = make_response(jsonify(return_json), status_code)
         return response
 
     def post(self):
+        dbsession = DBSession()
         username = request.json.get('username')
         password = request.json.get('password')
         password = md5(password)
@@ -41,6 +42,7 @@ class LoginApi(Resource):
             message = "Login Fail!"
 
         return_json = {"message": message}
+        dbsession.close()
         return jsonify(return_json)
 
     def delete(self):
@@ -48,3 +50,4 @@ class LoginApi(Resource):
         message = "Logout Success!"
         return_json = {"message": message}
         return jsonify(return_json)
+

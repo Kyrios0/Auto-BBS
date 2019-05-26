@@ -3,6 +3,7 @@ from sqlalchemy import Column, DateTime, ForeignKey, String, text, create_engine
 from sqlalchemy.dialects.mysql import BIT, INTEGER, MEDIUMTEXT
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.exc import IntegrityError
 
@@ -10,9 +11,26 @@ import config
 
 Base = declarative_base()
 metadata = Base.metadata
-engine = create_engine(config.MYSQLALCHEMY_DATABSE_URI)
-DBSession = sessionmaker(bind = engine)
-dbsession = DBSession()
+engine = create_engine(config.MYSQLALCHEMY_DATABSE_URI, pool_size = 0)
+session_factory = sessionmaker(bind = engine)
+DBSession = scoped_session(session_factory)
+
+
+def set_hot_list(data):
+    global hot_list_cache
+    hot_list_cache = data
+
+class HotListCache:
+    def __init__(self, data):
+        self.hot_list_cache = data
+
+    def set_hot(self, data):
+        self.hot_list_cache = data
+
+    def get_hot(self):
+        return self.hot_list_cache
+
+hot_list_cache = HotListCache(123)
 
 class User(Base):
     __tablename__ = 'user'
@@ -75,4 +93,5 @@ class CommentAgree(Base):
 
     comment = relationship('Comment')
     user = relationship('User')
+
 
