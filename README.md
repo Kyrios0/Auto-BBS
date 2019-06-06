@@ -7,7 +7,15 @@ UESTC SCSE 2019 System Level Comprehensive Software Design Project
 
 ![](https://repository-images.githubusercontent.com/173777946/dfee0980-8893-11e9-8959-fcf03888cc24)
 
-## Function
+## Deploy
+
+Frontend: https://github.com/Kyrios0/Auto-BBS/blob/master/docs/install.md
+
+## API
+
+https://github.com/Kyrios0/Auto-BBS/blob/master/docs/apiv1.0.md
+
+## Basic Function
 
 1.实现权限分级 
 
