@@ -1,4 +1,6 @@
 # Auto-BBS
+A BBS crafted by React.js+Flask-RESTful
+
 UESTC SCSE 2019 System Level Comprehensive Software Design Project
 
 ## Demo
