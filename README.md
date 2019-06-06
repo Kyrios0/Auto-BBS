@@ -1,6 +1,10 @@
 # Auto-BBS
 UESTC SCSE 2019 System Level Comprehensive Software Design Project
 
+## Demo
+
+![](https://repository-images.githubusercontent.com/173777946/dfee0980-8893-11e9-8959-fcf03888cc24)
+
 ## Function
 
 1.实现权限分级 
