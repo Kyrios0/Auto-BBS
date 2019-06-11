@@ -24,3 +24,5 @@ Now,
 node_modules\.bin\webpack
 ```
 
+Please set your backend IP in bbs/app_bbs/static/js/basic.jsx: bindURL
+
