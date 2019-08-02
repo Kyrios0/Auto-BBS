@@ -1,7 +1,5 @@
 # Install
 
-(On windows)
-
 Firstly, get node.js from [https://nodejs.org/en/](https://nodejs.org/en/)
 
 Next, install react, webpack and babel:
