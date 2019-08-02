@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import *
 from app_bbs.resources.topic import *
 from app_bbs.resources.login import *
 from app_bbs.resources.user import *
@@ -33,6 +33,10 @@ api.add_resource(AgreeApi, '/api/agree/<int:tid>',
                  '/api/agree/<int:tid>/<int:rid>/<int:rrid>')
 
 api.add_resource(HotApi, '/api/topic/hot')
+
+@app.route('/')
+def index():
+    return render_template('dev.html')
 
 @app.route('/<path:path>')
 def all(path):
